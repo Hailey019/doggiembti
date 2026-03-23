@@ -1,0 +1,1801 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>汪汪性格测试 · 狗狗MBTI</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#faf6f0;--warm-white:#fff9f2;--bark:#8b6343;--bark-light:#c49a72;
+  --bark-dark:#5c3d1e;--earth:#d4a574;--leaf:#7a9e7e;--leaf-light:#a8c5aa;
+  --sand:#e8d5b7;--sand-dark:#d4bc99;--text-main:#3d2c1e;--text-soft:#7a6558;
+  --text-muted:#b0a090;--shadow:0 4px 24px rgba(139,99,67,.10);
+  --shadow-hover:0 8px 40px rgba(139,99,67,.18);--radius:20px;--radius-sm:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--cream);font-family:'Noto Sans SC',sans-serif;color:var(--text-main);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle at 15% 15%,rgba(212,165,116,.13) 0%,transparent 50%),radial-gradient(circle at 85% 85%,rgba(122,158,126,.10) 0%,transparent 50%);pointer-events:none;z-index:0;}
+.page{position:relative;z-index:1;}.hidden{display:none!important;}
+nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;position:sticky;top:0;background:rgba(250,246,240,.93);backdrop-filter:blur(14px);z-index:100;border-bottom:1px solid rgba(212,165,116,.2);}
+.nav-logo{font-family:'Noto Serif SC',serif;font-size:1rem;color:var(--bark-dark);font-weight:600;display:flex;align-items:center;gap:.45rem;cursor:pointer;}
+.nav-tabs{display:flex;gap:.15rem;}
+.nav-tab{padding:.38rem .9rem;border:none;background:transparent;font-family:'Noto Sans SC',sans-serif;font-size:.8rem;color:var(--text-soft);cursor:pointer;border-radius:100px;transition:all .2s;white-space:nowrap;}
+.nav-tab:hover{background:var(--sand);color:var(--bark-dark);}
+.nav-tab.active{background:var(--bark);color:white;}
+.btn-primary{background:var(--bark);color:white;border:none;padding:.85rem 2rem;border-radius:100px;font-family:'Noto Sans SC',sans-serif;font-size:.95rem;cursor:pointer;transition:all .25s;box-shadow:0 4px 16px rgba(139,99,67,.28);}
+.btn-primary:hover{background:var(--bark-dark);transform:translateY(-2px);}
+.btn-secondary{background:transparent;color:var(--bark);border:1.5px solid var(--earth);padding:.85rem 2rem;border-radius:100px;font-family:'Noto Sans SC',sans-serif;font-size:.95rem;cursor:pointer;transition:all .25s;}
+.btn-secondary:hover{background:var(--sand);}
+.btn-sm{padding:.5rem 1.1rem;border-radius:100px;font-family:'Noto Sans SC',sans-serif;font-size:.8rem;cursor:pointer;transition:all .2s;border:none;}
+.btn-sm.primary{background:var(--bark);color:white;}.btn-sm.primary:hover{background:var(--bark-dark);}
+.btn-sm.ghost{background:var(--sand);color:var(--text-soft);}.btn-sm.ghost:hover{background:var(--sand-dark);}
+.hero{text-align:center;padding:4rem 2rem 2.5rem;max-width:640px;margin:0 auto;}
+.hero-paw{font-size:3rem;margin-bottom:1.1rem;display:block;animation:float 3s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.hero h1{font-family:'Noto Serif SC',serif;font-size:clamp(1.7rem,4vw,2.6rem);color:var(--bark-dark);line-height:1.35;margin-bottom:.75rem;}
+.hero h1 span{color:var(--bark);}
+.hero p{font-size:.93rem;color:var(--text-soft);line-height:1.85;margin-bottom:1.8rem;}
+.hero-actions{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;}
+/* Science badge */
+.science-badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(122,158,126,.12);border:1px solid rgba(122,158,126,.3);color:#4a7a50;border-radius:100px;padding:.28rem .85rem;font-size:.72rem;margin-bottom:1.2rem;}
+.breed-grid-section{max-width:980px;margin:0 auto;padding:0 2rem 3.5rem;}
+.section-title{font-family:'Noto Serif SC',serif;font-size:1.1rem;color:var(--bark-dark);margin-bottom:1.3rem;text-align:center;}
+.breed-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.85rem;}
+.breed-card{background:var(--warm-white);border-radius:var(--radius);padding:1.2rem .85rem .95rem;text-align:center;box-shadow:var(--shadow);border:1px solid rgba(212,165,116,.17);cursor:pointer;transition:all .25s;position:relative;overflow:hidden;}
+.breed-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-hover);}
+.breed-card .dog-svg-wrap{width:72px;height:72px;margin:0 auto .55rem;}
+.breed-card .dog-svg-wrap svg{width:100%;height:100%;}
+.breed-card .bc-name{font-size:.76rem;font-weight:500;color:var(--text-soft);}
+.breed-card .bc-type{font-size:.68rem;color:var(--bark-light);margin-top:.1rem;font-weight:500;}
+.more-badge{position:absolute;top:.55rem;right:.55rem;background:var(--bark);color:white;border-radius:100px;font-size:.58rem;padding:.1rem .4rem;}
+/* QUIZ */
+.quiz-section{max-width:660px;margin:0 auto;padding:2rem;}
+.dog-selector{background:var(--warm-white);border-radius:var(--radius);padding:1.2rem;margin-bottom:1.3rem;box-shadow:var(--shadow);border:1px solid rgba(212,165,116,.17);}
+.dog-selector h3{font-family:'Noto Serif SC',serif;font-size:.9rem;color:var(--bark-dark);margin-bottom:.8rem;}
+.dogs-list{display:flex;gap:.55rem;flex-wrap:wrap;align-items:center;}
+.dog-chip{display:flex;align-items:center;gap:.38rem;padding:.4rem .85rem;background:var(--sand);border-radius:100px;border:none;cursor:pointer;font-family:'Noto Sans SC',sans-serif;font-size:.78rem;color:var(--text-soft);transition:all .2s;}
+.dog-chip.active{background:var(--bark);color:white;}
+.add-dog-btn{padding:.4rem .85rem;background:transparent;border:1.5px dashed var(--bark-light);border-radius:100px;font-size:.78rem;color:var(--bark-light);cursor:pointer;transition:all .2s;font-family:'Noto Sans SC',sans-serif;}
+.add-dog-btn:hover{background:var(--sand);color:var(--bark);}
+.quiz-progress{margin-bottom:1.3rem;}
+.progress-info{display:flex;justify-content:space-between;margin-bottom:.42rem;}
+.progress-label{font-size:.74rem;color:var(--text-muted);}
+.progress-dog-name{font-size:.78rem;color:var(--bark);font-weight:500;}
+.progress-track{height:4px;background:var(--sand);border-radius:2px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--bark-light),var(--bark));border-radius:2px;transition:width .4s ease;}
+/* Dimension progress indicator */
+.dim-progress{display:flex;gap:.3rem;margin-bottom:1rem;}
+.dim-pip{height:3px;flex:1;border-radius:2px;background:var(--sand);transition:background .3s;}
+.dim-pip.filled{background:var(--bark-light);}
+.dim-pip.active{background:var(--bark);}
+.dim-label-row{display:flex;justify-content:space-between;margin-bottom:.9rem;}
+.dim-label-pill{font-size:.65rem;padding:.18rem .55rem;border-radius:100px;font-weight:500;}
+.question-card{background:var(--warm-white);border-radius:var(--radius);padding:2rem;box-shadow:var(--shadow);border:1px solid rgba(212,165,116,.17);animation:slideIn .3s ease;}
+@keyframes slideIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.q-scenario{font-size:1.9rem;text-align:center;margin-bottom:.85rem;}
+.q-dim-tag{text-align:center;font-size:.7rem;color:var(--bark-light);margin-bottom:.6rem;font-weight:500;letter-spacing:.04em;}
+.q-text{font-family:'Noto Serif SC',serif;font-size:1.1rem;color:var(--bark-dark);line-height:1.6;text-align:center;margin-bottom:1.6rem;}
+.q-options{display:flex;flex-direction:column;gap:.62rem;}
+.q-option{padding:.9rem 1.15rem;background:var(--cream);border:1.5px solid var(--sand-dark);border-radius:var(--radius-sm);cursor:pointer;font-size:.88rem;color:var(--text-soft);text-align:left;transition:all .2s;display:flex;align-items:flex-start;gap:.62rem;line-height:1.55;font-family:'Noto Sans SC',sans-serif;}
+.q-option::before{content:'';width:15px;height:15px;border-radius:50%;border:2px solid var(--sand-dark);flex-shrink:0;margin-top:2px;transition:all .2s;}
+.q-option:hover{background:var(--sand);border-color:var(--bark-light);color:var(--text-main);}
+.q-option.selected{background:#fdf0e4;border-color:var(--bark);color:var(--bark-dark);}
+.q-option.selected::before{background:var(--bark);border-color:var(--bark);}
+/* REVEAL */
+#result-reveal{position:fixed;inset:0;z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bark-dark);overflow:hidden;}
+#result-reveal .reveal-bg{position:absolute;inset:0;opacity:0;transition:opacity 1s;}
+#result-reveal .reveal-particles{position:absolute;inset:0;pointer-events:none;}
+.particle{position:absolute;border-radius:50%;animation:particleFly 2.5s ease-out forwards;}
+@keyframes particleFly{0%{transform:translate(0,0) scale(1);opacity:1;}100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0;}}
+.reveal-step{text-align:center;color:white;padding:2rem;position:relative;z-index:2;}
+.reveal-mbti-letters{display:flex;gap:1.2rem;justify-content:center;margin:1.5rem 0;}
+.mbti-letter{width:72px;height:72px;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;transform:translateY(30px);transition:all .5s ease;}
+.mbti-letter.show{opacity:1;transform:translateY(0);}
+.mbti-letter .ml{font-size:2rem;font-weight:700;font-family:'Noto Serif SC',serif;line-height:1;}
+.mbti-letter .ms{font-size:.6rem;margin-top:.2rem;opacity:.8;}
+.reveal-title{font-family:'Noto Serif SC',serif;font-size:1.6rem;opacity:0;transform:translateY(20px);transition:all .5s ease .8s;margin-bottom:.5rem;}
+.reveal-title.show{opacity:1;transform:translateY(0);}
+.reveal-tagline{font-size:.88rem;opacity:0;transition:all .5s ease 1s;}
+.reveal-tagline.show{opacity:.8;}
+.reveal-btn{opacity:0;transition:all .4s ease 1.4s;margin-top:2rem;}
+.reveal-btn.show{opacity:1;}
+.reveal-dog-svg{width:100px;height:100px;margin:0 auto 1rem;opacity:0;transform:scale(.5);transition:all .6s ease .3s;}
+.reveal-dog-svg.show{opacity:1;transform:scale(1);}
+.reveal-dog-svg svg{width:100%;height:100%;}
+/* RESULT */
+.result-section{max-width:820px;margin:0 auto;padding:2rem;}
+.result-mbti-hero{text-align:center;padding:2rem 2rem 1.5rem;background:var(--warm-white);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid rgba(212,165,116,.17);margin-bottom:1.4rem;}
+.rh-letters{display:flex;gap:.8rem;justify-content:center;margin-bottom:1.2rem;}
+.rh-letter{width:64px;height:64px;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.rh-letter .rl{font-size:1.8rem;font-weight:700;font-family:'Noto Serif SC',serif;line-height:1;}
+.rh-letter .rs{font-size:.56rem;margin-top:.15rem;}
+.rh-name{font-family:'Noto Serif SC',serif;font-size:1.3rem;color:var(--bark-dark);margin-bottom:.3rem;}
+.rh-tag-name{display:inline-block;background:var(--sand);color:var(--bark-dark);padding:.18rem .7rem;border-radius:100px;font-size:.76rem;margin-bottom:.8rem;}
+.rh-tagline{font-size:.88rem;color:var(--bark);font-style:italic;}
+/* Science disclaimer */
+.science-note{background:rgba(122,158,126,.08);border:1px solid rgba(122,158,126,.25);border-radius:var(--radius-sm);padding:.85rem 1rem;margin-bottom:1.4rem;display:flex;gap:.65rem;align-items:flex-start;}
+.science-note-icon{font-size:1rem;flex-shrink:0;margin-top:.05rem;}
+.science-note-text{font-size:.76rem;color:#4a7a50;line-height:1.65;}
+/* C-BARQ dimensions */
+.cbarq-section{background:var(--warm-white);border-radius:var(--radius);padding:1.5rem;box-shadow:var(--shadow);border:1px solid rgba(212,165,116,.17);margin-bottom:1.4rem;}
+.cbarq-section h3{font-family:'Noto Serif SC',serif;font-size:1rem;color:var(--bark-dark);margin-bottom:.35rem;}
+.cbarq-subtitle{font-size:.72rem;color:var(--text-muted);margin-bottom:1.1rem;}
+.cbarq-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.85rem;}
+.cbarq-card{background:var(--cream);border-radius:var(--radius-sm);padding:1rem;}
+.cbarq-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem;}
+.cbarq-label{font-size:.76rem;font-weight:500;color:var(--text-main);}
+.cbarq-score{font-size:.8rem;font-weight:600;}
+.cbarq-bar{height:5px;background:var(--sand);border-radius:3px;overflow:hidden;margin-bottom:.45rem;}
+.cbarq-fill{height:100%;border-radius:3px;transition:width .9s ease;}
+.cbarq-desc{font-size:.7rem;color:var(--text-soft);line-height:1.55;}
+/* Behavior analysis */
+.behavior-section{background:var(--warm-white);border-radius:var(--radius);padding:1.5rem;box-shadow:var(--shadow);border:1px solid rgba(212,165,116,.17);margin-bottom:1.4rem;}
+.behavior-section h3{font-family:'Noto Serif SC',serif;font-size:1rem;color:var(--bark-dark);margin-bottom:1rem;}
+.behavior-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1rem;}
+.beh-card{background:var(--cream);border-radius:var(--radius-sm);padding:.85rem .75rem;text-align:center;}
+.beh-icon{font-size:1.4rem;margin-bottom:.3rem;}
+.beh-title{font-size:.7rem;font-weight:500;color:var(--text-main);margin-bottom:.18rem;}
+.beh-desc{font-size:.66rem;color:var(--text-soft);line-height:1.5;}
+.trait-pills{display:flex;flex-wrap:wrap;gap:.4rem;}
+.trait-pill{padding:.25rem .78rem;background:var(--sand);border-radius:100px;font-size:.72rem;color:var(--bark-dark);}
+/* Tips */
+.tips-section{background:var(--warm-white);border-radius:var(--radius);padding:1.5rem;box-shadow:var(--shadow);border:1px solid rgba(212,165,116,.17);margin-bottom:1.4rem;}
+.tips-section h3{font-family:'Noto Serif SC',serif;font-size:1rem;color:var(--bark-dark);margin-bottom:1rem;}
+.tips-tabs{display:flex;gap:.4rem;margin-bottom:1rem;flex-wrap:wrap;}
+.tips-tab{padding:.35rem .85rem;border:1.5px solid var(--sand-dark);border-radius:100px;background:transparent;font-size:.76rem;color:var(--text-soft);cursor:pointer;transition:all .2s;font-family:'Noto Sans SC',sans-serif;}
+.tips-tab.active{background:var(--bark);color:white;border-color:var(--bark);}
+.tips-content{display:none;}
+.tips-content.active{display:block;animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+.tip-item{display:flex;gap:.7rem;padding:.75rem 0;border-bottom:1px solid rgba(212,165,116,.15);}
+.tip-item:last-child{border-bottom:none;padding-bottom:0;}
+.tip-icon{font-size:1rem;flex-shrink:0;margin-top:.05rem;}
+.tip-text{font-size:.82rem;color:var(--text-soft);line-height:1.65;}
+.tip-text strong{color:var(--bark-dark);font-weight:500;}
+.result-actions{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center;margin-bottom:1.4rem;}
+.btn-action{padding:.65rem 1.1rem;border-radius:var(--radius-sm);border:1.5px solid var(--sand-dark);background:transparent;font-family:'Noto Sans SC',sans-serif;font-size:.8rem;color:var(--text-soft);cursor:pointer;transition:all .2s;}
+.btn-action:hover{background:var(--sand);color:var(--bark-dark);border-color:var(--bark-light);}
+.btn-action.primary{background:var(--bark);color:white;border-color:var(--bark);}
+.btn-action.primary:hover{background:var(--bark-dark);}
+.compare-insight{background:linear-gradient(135deg,#fdf5ec,#f0ede8);border:1px solid rgba(212,165,116,.28);border-radius:var(--radius);padding:1.4rem;margin-bottom:1.4rem;text-align:center;}
+.compare-insight h3{font-family:'Noto Serif SC',serif;color:var(--bark-dark);margin-bottom:.5rem;font-size:.96rem;}
+.compare-insight p{font-size:.84rem;color:var(--text-soft);line-height:1.7;}
+.compatibility-score{font-size:2rem;font-weight:700;color:var(--bark);margin:.35rem 0;}
+/* WANGBAIKE */
+.wangbaike-section{max-width:780px;margin:0 auto;padding:2rem;}
+.wb-filter{display:flex;gap:.45rem;flex-wrap:wrap;margin-bottom:1.5rem;}
+.wb-filter-btn{padding:.38rem .9rem;border:1.5px solid var(--sand-dark);border-radius:100px;background:transparent;font-size:.78rem;color:var(--text-soft);cursor:pointer;transition:all .2s;font-family:'Noto Sans SC',sans-serif;}
+.wb-filter-btn:hover{background:var(--sand);}
+.wb-filter-btn.active{background:var(--bark);color:white;border-color:var(--bark);}
+.wb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1rem;}
+.wb-card{background:var(--warm-white);border-radius:var(--radius);padding:1.4rem;box-shadow:var(--shadow);border:1px solid rgba(212,165,116,.17);cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.65rem;}
+.wb-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-hover);}
+.wb-card-top{display:flex;align-items:center;justify-content:space-between;}
+.wb-cat-badge{display:inline-flex;align-items:center;gap:.3rem;padding:.22rem .7rem;border-radius:100px;font-size:.68rem;font-weight:500;}
+.wb-cat-badge.know{background:#fdf0d8;color:#8b5c1a;}
+.wb-cat-badge.train{background:#e8f4ea;color:#3a6b40;}
+.wb-cat-badge.psych{background:#eee8f8;color:#5a4090;}
+.wb-cat-badge.breed{background:#fde8e8;color:#8b3030;}
+.wb-cat-badge.health{background:#e4f2f8;color:#2a5878;}
+.wb-cat-badge.science{background:#e8f4ea;color:#3a6b40;}
+.wb-read-time{font-size:.65rem;color:var(--text-muted);}
+.wb-card-title{font-family:'Noto Serif SC',serif;font-size:.98rem;color:var(--bark-dark);line-height:1.45;}
+.wb-card-preview{font-size:.8rem;color:var(--text-soft);line-height:1.65;}
+.wb-card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:.2rem;}
+.wb-emoji-tag{font-size:.7rem;color:var(--text-muted);}
+.wb-arrow{font-size:.8rem;color:var(--bark-light);}
+.article-overlay{position:fixed;inset:0;background:rgba(61,44,30,.45);backdrop-filter:blur(6px);z-index:400;display:flex;align-items:center;justify-content:center;padding:1.5rem;}
+.article-modal{background:var(--warm-white);border-radius:var(--radius);padding:2rem;max-width:520px;width:100%;max-height:88vh;overflow-y:auto;position:relative;box-shadow:0 24px 64px rgba(61,44,30,.22);}
+.article-cat-badge{margin-bottom:.8rem;display:inline-flex;align-items:center;gap:.3rem;padding:.22rem .7rem;border-radius:100px;font-size:.68rem;font-weight:500;}
+.article-title{font-family:'Noto Serif SC',serif;font-size:1.3rem;color:var(--bark-dark);line-height:1.45;margin-bottom:.5rem;}
+.article-meta{font-size:.72rem;color:var(--text-muted);margin-bottom:1.2rem;}
+.article-body{font-size:.88rem;color:var(--text-soft);line-height:1.9;}
+.article-body p{margin-bottom:.9rem;}
+.article-body p:last-child{margin-bottom:0;}
+.article-body .highlight{background:#fdf5e8;border-left:3px solid var(--bark-light);padding:.6rem .9rem;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:.9rem 0;}
+.article-body strong{color:var(--bark-dark);font-weight:500;}
+.article-body .tag-list{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1rem;}
+.article-body .tag{padding:.22rem .7rem;background:var(--sand);border-radius:100px;font-size:.7rem;color:var(--bark-dark);}
+/* ENCYCLOPEDIA */
+.encyclopedia-section{max-width:980px;margin:0 auto;padding:2rem;}
+.enc-search-row{display:flex;gap:.7rem;margin-bottom:1.3rem;flex-wrap:wrap;}
+.enc-search{flex:1;min-width:200px;padding:.65rem 1rem;border:1.5px solid var(--sand-dark);border-radius:100px;font-size:.85rem;font-family:'Noto Sans SC',sans-serif;background:var(--warm-white);color:var(--text-main);outline:none;transition:border-color .2s;}
+.enc-search:focus{border-color:var(--bark);}
+.enc-type-filter{display:flex;gap:.35rem;flex-wrap:wrap;}
+.enc-filter-btn{padding:.35rem .8rem;border:1.5px solid var(--sand-dark);border-radius:100px;background:transparent;font-size:.74rem;color:var(--text-soft);cursor:pointer;transition:all .2s;font-family:'Noto Sans SC',sans-serif;}
+.enc-filter-btn:hover{background:var(--sand);}
+.enc-filter-btn.active{background:var(--bark);color:white;border-color:var(--bark);}
+.enc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:.85rem;}
+.enc-card{background:var(--warm-white);border-radius:var(--radius);padding:1.3rem .85rem;text-align:center;box-shadow:var(--shadow);border:1px solid rgba(212,165,116,.17);cursor:pointer;transition:all .25s;position:relative;}
+.enc-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover);}
+.enc-card.mixed{border-color:rgba(122,158,126,.35);}
+.enc-dog-svg{width:82px;height:82px;margin:0 auto .7rem;}
+.enc-dog-svg svg{width:100%;height:100%;}
+.enc-mixed-badge{position:absolute;top:.55rem;left:.55rem;background:var(--leaf);color:white;border-radius:100px;font-size:.58rem;padding:.1rem .45rem;}
+.enc-name{font-weight:500;font-size:.83rem;color:var(--text-main);margin-bottom:.15rem;}
+.enc-type{font-size:.7rem;color:var(--bark);font-weight:500;margin-bottom:.32rem;}
+.enc-trait{font-size:.66rem;color:var(--text-muted);line-height:1.5;}
+.dog-detail-overlay{position:fixed;inset:0;background:rgba(61,44,30,.42);backdrop-filter:blur(5px);z-index:400;display:flex;align-items:center;justify-content:center;padding:1.5rem;}
+.dog-detail-modal{background:var(--warm-white);border-radius:var(--radius);padding:2rem;max-width:500px;width:100%;max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 24px 64px rgba(61,44,30,.22);}
+.ddm-svg{width:120px;height:120px;margin:0 auto .85rem;display:block;}
+.ddm-svg svg{width:100%;height:100%;}
+.ddm-name{font-family:'Noto Serif SC',serif;font-size:1.3rem;color:var(--bark-dark);text-align:center;margin-bottom:.25rem;}
+.ddm-badges{display:flex;gap:.4rem;justify-content:center;flex-wrap:wrap;margin-bottom:.5rem;}
+.ddm-origin{font-size:.75rem;color:var(--text-muted);text-align:center;margin-bottom:.85rem;}
+.ddm-tabs{display:flex;gap:.3rem;margin-bottom:1rem;border-bottom:1px solid rgba(212,165,116,.2);padding-bottom:.6rem;}
+.ddm-tab{padding:.3rem .75rem;border:none;background:transparent;font-size:.78rem;color:var(--text-soft);cursor:pointer;border-radius:100px;transition:all .2s;font-family:'Noto Sans SC',sans-serif;}
+.ddm-tab.active{background:var(--bark);color:white;}
+.ddm-content{display:none;font-size:.84rem;color:var(--text-soft);line-height:1.85;}
+.ddm-content.active{display:block;animation:fadeIn .25s ease;}
+.ddm-content p{margin-bottom:.75rem;}
+.ddm-content p:last-child{margin-bottom:0;}
+.ddm-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:.65rem;}
+.ddm-stat{background:var(--cream);border-radius:var(--radius-sm);padding:.8rem;text-align:center;}
+.ddm-stat-label{font-size:.65rem;color:var(--text-muted);margin-bottom:.25rem;}
+.ddm-stat-bar{height:4px;background:var(--sand);border-radius:2px;overflow:hidden;}
+.ddm-stat-fill{height:100%;background:linear-gradient(90deg,var(--earth),var(--bark));border-radius:2px;}
+.ddm-stat-val{font-size:.76rem;color:var(--bark);font-weight:500;margin-top:.25rem;}
+/* LEADERBOARD */
+.leaderboard-section{max-width:640px;margin:0 auto;padding:2rem;}
+.lb-item{background:var(--warm-white);border-radius:var(--radius-sm);padding:.82rem 1.1rem;display:flex;align-items:center;gap:.82rem;box-shadow:var(--shadow);border:1px solid rgba(212,165,116,.14);transition:transform .2s;margin-bottom:.55rem;}
+.lb-item:hover{transform:translateX(3px);}
+.lb-rank{font-family:'Noto Serif SC',serif;font-size:1rem;font-weight:600;color:var(--text-muted);min-width:24px;}
+.lb-rank.gold{color:#c9933a;}.lb-rank.silver{color:#9aabb7;}.lb-rank.bronze{color:#b07d5a;}
+.lb-dog-svg{width:40px;height:40px;flex-shrink:0;}
+.lb-dog-svg svg{width:100%;height:100%;}
+.lb-info{flex:1;}
+.lb-name{font-weight:500;color:var(--text-main);font-size:.84rem;}
+.lb-mbti{font-size:.68rem;color:var(--bark-light);margin-top:.07rem;}
+.lb-bar-wrap{width:115px;}
+.lb-bar-track{height:5px;background:var(--sand);border-radius:3px;overflow:hidden;margin-bottom:.15rem;}
+.lb-bar-fill{height:100%;background:linear-gradient(90deg,var(--bark-light),var(--bark));border-radius:3px;}
+.lb-count{font-size:.67rem;color:var(--text-muted);text-align:right;}
+/* DAILY */
+.daily-card{background:linear-gradient(135deg,#fdf5ec,#f5ede0);border:1px solid rgba(212,165,116,.3);border-radius:var(--radius);padding:1.3rem;margin-bottom:1.2rem;position:relative;overflow:hidden;}
+.daily-card::before{content:'🌿';position:absolute;right:1rem;top:.55rem;font-size:1.7rem;opacity:.22;}
+.daily-title{font-family:'Noto Serif SC',serif;font-size:.84rem;color:var(--bark-dark);margin-bottom:.42rem;}
+.daily-q{font-size:.9rem;color:var(--text-soft);line-height:1.7;margin-bottom:.85rem;}
+.daily-opts{display:flex;flex-direction:column;gap:.42rem;}
+.daily-opt{padding:.52rem .88rem;background:var(--warm-white);border:1.5px solid var(--sand-dark);border-radius:var(--radius-sm);cursor:pointer;font-size:.8rem;color:var(--text-soft);text-align:left;transition:all .2s;font-family:'Noto Sans SC',sans-serif;}
+.daily-opt:hover{background:var(--sand);}
+.daily-opt.correct{background:#edf6ee;border-color:#7a9e7e;color:#3d6642;}
+.daily-opt.wrong{background:#fdf0ee;border-color:#d48a7a;color:#7a3a2e;}
+.daily-streak{display:inline-flex;align-items:center;gap:.28rem;background:var(--bark);color:white;border-radius:100px;padding:.2rem .65rem;font-size:.7rem;margin-bottom:.7rem;}
+/* MODALS */
+.modal-overlay{position:fixed;inset:0;background:rgba(61,44,30,.4);backdrop-filter:blur(4px);z-index:200;display:flex;align-items:center;justify-content:center;padding:2rem;}
+.modal{background:var(--warm-white);border-radius:var(--radius);padding:1.8rem;max-width:340px;width:100%;box-shadow:0 20px 60px rgba(61,44,30,.2);}
+.modal h3{font-family:'Noto Serif SC',serif;font-size:1rem;color:var(--bark-dark);margin-bottom:.82rem;}
+.modal input{width:100%;padding:.7rem .92rem;border:1.5px solid var(--sand-dark);border-radius:var(--radius-sm);font-family:'Noto Sans SC',sans-serif;font-size:.88rem;color:var(--text-main);background:var(--cream);outline:none;transition:border-color .2s;margin-bottom:.82rem;}
+.modal input:focus{border-color:var(--bark);}
+.modal-actions{display:flex;gap:.55rem;justify-content:flex-end;}
+.share-overlay{position:fixed;inset:0;background:rgba(61,44,30,.5);backdrop-filter:blur(6px);z-index:300;display:flex;align-items:center;justify-content:center;padding:1.5rem;}
+.share-modal{background:var(--warm-white);border-radius:var(--radius);padding:1.7rem;max-width:380px;width:100%;position:relative;box-shadow:0 24px 64px rgba(61,44,30,.24);}
+.share-modal h3{font-family:'Noto Serif SC',serif;color:var(--bark-dark);margin-bottom:1rem;font-size:1rem;}
+.share-preview{background:linear-gradient(135deg,#fdf0e4,#f5ece3);border-radius:var(--radius-sm);padding:1.5rem;text-align:center;margin-bottom:1.1rem;border:1px solid rgba(212,165,116,.22);}
+.sp-svg{width:80px;height:80px;margin:0 auto .65rem;}
+.sp-svg svg{width:100%;height:100%;}
+.sp-mbti{font-family:'Noto Serif SC',serif;font-size:1.4rem;color:var(--bark-dark);margin-bottom:.18rem;font-weight:700;}
+.sp-name{font-size:.82rem;color:var(--bark);margin-bottom:.55rem;}
+.sp-traits{font-size:.72rem;color:var(--text-soft);}
+.share-url-row{display:flex;gap:.4rem;margin-bottom:.75rem;}
+.share-url-input{flex:1;padding:.5rem .8rem;border:1.5px solid var(--sand-dark);border-radius:var(--radius-sm);font-size:.75rem;color:var(--text-soft);background:var(--cream);font-family:'Noto Sans SC',sans-serif;outline:none;}
+.share-btns{display:flex;gap:.38rem;}
+.share-platform-btn{flex:1;padding:.55rem;border:1.5px solid var(--sand-dark);border-radius:var(--radius-sm);background:var(--cream);font-size:.75rem;color:var(--text-soft);cursor:pointer;transition:all .2s;font-family:'Noto Sans SC',sans-serif;}
+.share-platform-btn:hover{background:var(--sand);color:var(--bark-dark);}
+.close-btn{position:absolute;top:.9rem;right:.9rem;background:var(--sand);border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:.82rem;color:var(--text-soft);display:flex;align-items:center;justify-content:center;transition:background .2s;}
+.close-btn:hover{background:var(--sand-dark);}
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(0);background:var(--bark-dark);color:white;padding:.6rem 1.3rem;border-radius:100px;font-size:.78rem;z-index:600;transition:all .3s;opacity:1;}
+.toast.hide{opacity:0;transform:translateX(-50%) translateY(8px);}
+footer{text-align:center;padding:2.5rem 2rem;color:var(--text-muted);font-size:.74rem;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.result-mbti-badge{display:inline-block;background:var(--bark);color:white;padding:.18rem .7rem;border-radius:100px;font-size:.76rem;font-weight:500;}
+@media(max-width:640px){
+  nav{padding:.75rem 1rem;}.nav-tab{padding:.32rem .65rem;font-size:.74rem;}
+  .hero{padding:2.5rem 1.2rem 2rem;}.breed-grid{grid-template-columns:repeat(2,1fr);}
+  .quiz-section,.result-section,.wangbaike-section,.encyclopedia-section,.leaderboard-section{padding:1.2rem 1rem;}
+  .question-card{padding:1.4rem;}.cbarq-grid{grid-template-columns:1fr;}
+  .behavior-grid{grid-template-columns:repeat(2,1fr);}.enc-grid{grid-template-columns:repeat(2,1fr);}
+  .rh-letters{gap:.5rem;}.rh-letter{width:54px;height:54px;}.rh-letter .rl{font-size:1.5rem;}
+  .reveal-mbti-letters{gap:.7rem;}.mbti-letter{width:58px;height:58px;}.mbti-letter .ml{font-size:1.6rem;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo" onclick="showTab('home')">
+    <svg width="20" height="20" viewBox="0 0 24 24"><ellipse cx="8" cy="9" rx="3" ry="4" fill="#8b6343" opacity=".9"/><ellipse cx="16" cy="9" rx="3" ry="4" fill="#8b6343" opacity=".9"/><ellipse cx="12" cy="14" rx="6" ry="5" fill="#c49a72"/><circle cx="10" cy="13" r="1.2" fill="#5c3d1e"/><circle cx="14" cy="13" r="1.2" fill="#5c3d1e"/><ellipse cx="12" cy="15.5" rx="1.8" ry="1.2" fill="#d4a0a0"/></svg>
+    汪汪性格测试
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showTab('home')">首页</button>
+    <button class="nav-tab" onclick="showTab('quiz')">测试</button>
+    <button class="nav-tab" onclick="showTab('wangbaike')">汪百科</button>
+    <button class="nav-tab" onclick="showTab('encyclopedia')">品种百科</button>
+    <button class="nav-tab" onclick="showTab('leaderboard')">排行榜</button>
+  </div>
+</nav>
+
+<div id="page-home" class="page">
+  <div class="hero">
+    <span class="hero-paw">🐾</span>
+    <div class="science-badge">🔬 题目设计参考宾夕法尼亚大学 C-BARQ 犬类行为量表</div>
+    <h1>你的狗狗是<span>什么性格</span>？</h1>
+    <p>用 MBTI 16 种性格类型，结合经过验证的犬类行为研究，<br>深度解读你家汪汪的行为模式与互动偏好。</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="showTab('quiz')">🐶 开始测试</button>
+      <button class="btn-secondary" onclick="showTab('wangbaike')">📚 汪百科</button>
+    </div>
+  </div>
+  <div style="max-width:540px;margin:0 auto;padding:0 2rem 1rem;" id="home-daily"></div>
+  <div class="breed-grid-section">
+    <div class="section-title">探索 16 种狗狗性格类型</div>
+    <div class="breed-grid" id="home-breed-grid"></div>
+  </div>
+</div>
+
+<div id="page-quiz" class="page hidden">
+  <div class="quiz-section">
+    <div class="dog-selector">
+      <h3>🐕 正在测试的狗狗</h3>
+      <div class="dogs-list" id="dogs-list">
+        <button class="add-dog-btn" onclick="openAddDog()">+ 添加狗狗</button>
+      </div>
+    </div>
+    <div id="quiz-main">
+      <div style="text-align:center;padding:4rem 2rem;color:var(--text-muted);">
+        <svg width="76" height="76" viewBox="0 0 80 80" style="margin:0 auto 1rem;display:block;opacity:.32;"><ellipse cx="25" cy="28" rx="10" ry="13" fill="#8b6343"/><ellipse cx="55" cy="28" rx="10" ry="13" fill="#8b6343"/><ellipse cx="40" cy="46" rx="20" ry="16" fill="#c49a72"/><circle cx="34" cy="44" r="4" fill="#5c3d1e"/><circle cx="46" cy="44" r="4" fill="#5c3d1e"/><ellipse cx="40" cy="50" rx="5" ry="3.5" fill="#d4a0a0"/></svg>
+        <p style="margin-bottom:1rem;">先添加你的狗狗，然后开始测试！</p>
+        <button class="btn-primary" onclick="openAddDog()">添加第一只狗狗</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="page-result" class="page hidden">
+  <div class="result-section" id="result-inner"></div>
+</div>
+
+<div id="page-wangbaike" class="page hidden">
+  <div class="wangbaike-section">
+    <div style="margin-bottom:1.5rem;">
+      <div class="section-title" style="text-align:left;margin-bottom:.3rem;">📚 汪百科</div>
+      <p style="font-size:.82rem;color:var(--text-muted);">关于狗狗的一切，短小精悍，每天涨知识</p>
+    </div>
+    <div class="wb-filter" id="wb-filter"></div>
+    <div class="wb-grid" id="wb-grid"></div>
+  </div>
+</div>
+
+<div id="page-encyclopedia" class="page hidden">
+  <div class="encyclopedia-section">
+    <div style="margin-bottom:1.4rem;">
+      <div class="section-title" style="text-align:left;margin-bottom:.25rem;">🐾 品种百科</div>
+      <p style="font-size:.82rem;color:var(--text-muted);">纯种犬 · 混血犬 · 流行串串，点击了解历史与性格</p>
+    </div>
+    <div class="enc-search-row">
+      <input class="enc-search" id="enc-search" placeholder="搜索品种…" oninput="filterEnc()">
+      <div class="enc-type-filter" id="enc-type-filter"></div>
+    </div>
+    <div class="enc-grid" id="enc-grid"></div>
+  </div>
+</div>
+
+<div id="page-leaderboard" class="page hidden">
+  <div class="leaderboard-section">
+    <div class="section-title" style="margin-bottom:1.5rem;">🏆 MBTI 性格排行榜</div>
+    <div id="leaderboard-list"></div>
+  </div>
+</div>
+
+<div id="result-reveal" class="hidden">
+  <div class="reveal-bg" id="reveal-bg"></div>
+  <div class="reveal-particles" id="reveal-particles"></div>
+  <div class="reveal-step" id="reveal-step"></div>
+</div>
+
+<div id="add-dog-modal" class="modal-overlay hidden">
+  <div class="modal" style="max-width:400px;width:100%;">
+    <!-- Step indicator -->
+    <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:1.2rem;">
+      <div id="step-pip-1" style="flex:1;height:3px;border-radius:2px;background:var(--bark);transition:background .3s;"></div>
+      <div id="step-pip-2" style="flex:1;height:3px;border-radius:2px;background:var(--sand);transition:background .3s;"></div>
+      <div style="font-size:.7rem;color:var(--text-muted);" id="step-label">第 1 步 / 共 2 步</div>
+    </div>
+    <!-- STEP 1 -->
+    <div id="add-step-1">
+      <h3 style="margin-bottom:.25rem;">🐕 你的狗狗叫什么？</h3>
+      <p style="font-size:.78rem;color:var(--text-muted);margin-bottom:.9rem;">起个名字，让测试结果更有个性</p>
+      <input type="text" id="dog-name-input" placeholder="例如：旺财、小白、豆豆…" maxlength="10"
+        style="width:100%;padding:.7rem .92rem;border:1.5px solid var(--sand-dark);border-radius:var(--radius-sm);font-family:'Noto Sans SC',sans-serif;font-size:.88rem;color:var(--text-main);background:var(--cream);outline:none;margin-bottom:.9rem;">
+      <div style="display:flex;gap:.55rem;justify-content:flex-end;">
+        <button class="btn-sm ghost" onclick="closeAddDog()">取消</button>
+        <button class="btn-sm primary" onclick="goToStep2()">下一步 →</button>
+      </div>
+    </div>
+    <!-- STEP 2 -->
+    <div id="add-step-2" class="hidden">
+      <h3 style="margin-bottom:.2rem;">🐾 <span id="step2-dog-name"></span> 是什么品种？</h3>
+      <p style="font-size:.78rem;color:var(--text-muted);margin-bottom:.85rem;">选品种生成专属形象，不知道品种可以选毛色</p>
+      <input id="breed-search" placeholder="搜索品种，例如：柴犬、金毛…"
+        style="width:100%;padding:.6rem .85rem;border:1.5px solid var(--sand-dark);border-radius:100px;font-family:'Noto Sans SC',sans-serif;font-size:.8rem;background:var(--cream);outline:none;margin-bottom:.75rem;"
+        oninput="filterBreedPicker()">
+      <div id="breed-picker-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;max-height:220px;overflow-y:auto;margin-bottom:.85rem;padding-right:2px;"></div>
+      <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem;">
+        <div style="flex:1;height:1px;background:var(--sand-dark);"></div>
+        <span style="font-size:.7rem;color:var(--text-muted);white-space:nowrap;">不知道品种？选个毛色</span>
+        <div style="flex:1;height:1px;background:var(--sand-dark);"></div>
+      </div>
+      <div id="color-picker-row" style="display:flex;gap:.55rem;justify-content:center;margin-bottom:1rem;flex-wrap:wrap;"></div>
+      <div id="breed-selection-preview" style="display:none;background:var(--cream);border-radius:var(--radius-sm);padding:.65rem .85rem;margin-bottom:.85rem;align-items:center;gap:.7rem;">
+        <div id="bsp-svg" style="width:44px;height:44px;flex-shrink:0;"></div>
+        <div style="flex:1;min-width:0;">
+          <div id="bsp-name" style="font-size:.82rem;font-weight:500;color:var(--text-main);"></div>
+          <div id="bsp-sub" style="font-size:.7rem;color:var(--text-muted);margin-top:.1rem;"></div>
+        </div>
+        <button onclick="clearBreedSelection()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:.8rem;flex-shrink:0;">✕</button>
+      </div>
+      <div style="display:flex;gap:.55rem;justify-content:space-between;">
+        <button class="btn-sm ghost" onclick="goToStep1()">← 返回</button>
+        <button class="btn-sm primary" onclick="confirmAddDog()">开始测试 🐾</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="dog-detail-overlay" class="dog-detail-overlay hidden">
+  <div class="dog-detail-modal" id="dog-detail-content">
+    <button class="close-btn" onclick="closeDogDetail()">✕</button>
+  </div>
+</div>
+<div id="article-overlay" class="article-overlay hidden">
+  <div class="article-modal" id="article-content">
+    <button class="close-btn" onclick="closeArticle()">✕</button>
+  </div>
+</div>
+<div id="share-overlay" class="share-overlay hidden">
+  <div class="share-modal" style="max-width:360px;padding:1.4rem;">
+    <button class="close-btn" onclick="closeShare()">✕</button>
+    <h3 style="margin-bottom:1rem;">📤 分享测试结果</h3>
+
+    <!-- Canvas preview -->
+    <div style="position:relative;margin-bottom:.75rem;display:flex;justify-content:center;">
+      <div style="position:relative;display:inline-block;">
+        <canvas id="share-canvas" style="border-radius:14px;display:block;box-shadow:0 8px 28px rgba(61,44,30,.22);transition:opacity .3s;"></canvas>
+        <!-- Loading overlay -->
+        <div id="share-loading" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(250,246,240,.85);border-radius:14px;backdrop-filter:blur(4px);">
+          <div style="font-size:2rem;animation:float 1.2s ease-in-out infinite;">🐾</div>
+          <div style="font-size:.78rem;color:var(--bark);margin-top:.5rem;font-weight:500;">生成中…</div>
+        </div>
+      </div>
+    </div>
+    <p style="text-align:center;font-size:.72rem;color:var(--text-muted);margin-bottom:.9rem;">📱 手机长按上方图片可保存到相册</p>
+
+    <!-- Link + QR row -->
+    <div style="display:flex;gap:.6rem;align-items:flex-end;margin-bottom:.8rem;">
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:.68rem;color:var(--text-muted);margin-bottom:.28rem;">直链</div>
+        <div style="display:flex;gap:.3rem;">
+          <input class="share-url-input" id="share-url" readonly style="flex:1;min-width:0;font-size:.7rem;padding:.42rem .7rem;">
+          <button class="btn-sm primary" onclick="copyLink()" style="white-space:nowrap;">复制</button>
+        </div>
+      </div>
+      <div style="flex-shrink:0;">
+        <div style="font-size:.68rem;color:var(--text-muted);margin-bottom:.28rem;text-align:center;">扫码测试</div>
+        <div id="share-qr" style="width:56px;height:56px;background:var(--sand);border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:.6rem;color:var(--text-muted);">QR</div>
+      </div>
+    </div>
+
+    <div class="share-btns">
+      <button class="share-platform-btn" onclick="shareWeibo()">📱 微博</button>
+      <button class="share-platform-btn" onclick="copyLink()">🔗 复制链接</button>
+    </div>
+  </div>
+</div>
+<div id="toast" class="toast hide"></div>
+<footer><p>🐾 汪汪性格测试 · MBTI 框架为娱乐用途 · 题目设计参考 C-BARQ 犬类行为研究 · 仅供参考</p></footer>
+
+<script>
+// ─── SVG PORTRAITS ───
+const dogSVGs={
+ENFJ:()=>`<svg viewBox="0 0 100 100"><ellipse cx="50" cy="62" rx="30" ry="24" fill="#e8b86a"/><ellipse cx="26" cy="45" rx="10" ry="14" fill="#d4a050" transform="rotate(-15 26 45)"/><ellipse cx="74" cy="45" rx="10" ry="14" fill="#d4a050" transform="rotate(15 74 45)"/><ellipse cx="50" cy="52" rx="22" ry="22" fill="#f0c878"/><ellipse cx="40" cy="49" rx="4.5" ry="5" fill="#3d2c1e"/><circle cx="41.5" cy="47.5" r="1.5" fill="white"/><ellipse cx="60" cy="49" rx="4.5" ry="5" fill="#3d2c1e"/><circle cx="61.5" cy="47.5" r="1.5" fill="white"/><ellipse cx="50" cy="58" rx="6" ry="4" fill="#c8946a"/><path d="M44 61 Q50 66 56 61" stroke="#5c3d1e" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M35 36 Q42 30 50 32 Q58 30 65 36" stroke="#d4a050" stroke-width="2" fill="none"/></svg>`,
+ENFP:()=>`<svg viewBox="0 0 100 100"><ellipse cx="50" cy="56" rx="28" ry="22" fill="#e8c890"/><ellipse cx="22" cy="54" rx="9" ry="17" fill="#7a4828" transform="rotate(8 22 54)"/><ellipse cx="78" cy="54" rx="9" ry="17" fill="#7a4828" transform="rotate(-8 78 54)"/><ellipse cx="50" cy="50" rx="20" ry="20" fill="#f5dca0"/><ellipse cx="40" cy="47" rx="4" ry="4.5" fill="#2c1e14"/><circle cx="41.5" cy="46" r="1.4" fill="white"/><ellipse cx="60" cy="47" rx="4" ry="4.5" fill="#2c1e14"/><circle cx="61.5" cy="46" r="1.4" fill="white"/><ellipse cx="50" cy="56" rx="5.5" ry="3.5" fill="#d4836a"/><path d="M44 58.5 Q50 64 56 58.5" stroke="#5c3d1e" stroke-width="1.5" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="42" rx="10" ry="5" fill="#7a4828"/></svg>`,
+ENTJ:()=>`<svg viewBox="0 0 100 100"><ellipse cx="50" cy="60" rx="25" ry="20" fill="#3d2c1e"/><ellipse cx="30" cy="44" rx="7" ry="11" fill="#3d2c1e" transform="rotate(-5 30 44)"/><ellipse cx="70" cy="44" rx="7" ry="11" fill="#3d2c1e" transform="rotate(5 70 44)"/><ellipse cx="50" cy="50" rx="20" ry="20" fill="#4d3828"/><ellipse cx="50" cy="44" rx="8" ry="4" fill="#7a5838"/><ellipse cx="40" cy="48" rx="4.2" ry="4.8" fill="#1e1410"/><circle cx="41.5" cy="46.5" r="1.6" fill="white"/><ellipse cx="60" cy="48" rx="4.2" ry="4.8" fill="#1e1410"/><circle cx="61.5" cy="46.5" r="1.6" fill="white"/><ellipse cx="50" cy="57" rx="6" ry="3.5" fill="#8b5040"/><path d="M44 59 Q50 63 56 59" stroke="#3d2418" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M36 39 L30 30 L38 34" fill="#3d2c1e"/><path d="M64 39 L70 30 L62 34" fill="#3d2c1e"/></svg>`,
+ENTP:()=>`<svg viewBox="0 0 100 100"><polygon points="28,48 22,22 38,38" fill="#e89040"/><polygon points="72,48 78,22 62,38" fill="#e89040"/><ellipse cx="50" cy="56" rx="30" ry="24" fill="#e89040"/><ellipse cx="50" cy="52" rx="22" ry="20" fill="#f5c878"/><ellipse cx="40" cy="49" rx="4.5" ry="5" fill="#2c1e14"/><circle cx="41.5" cy="47.5" r="1.5" fill="white"/><ellipse cx="60" cy="49" rx="4.5" ry="5" fill="#2c1e14"/><circle cx="61.5" cy="47.5" r="1.5" fill="white"/><ellipse cx="50" cy="59" rx="7" ry="4.5" fill="#d4836a"/><path d="M43 62 Q50 68 57 62" stroke="#5c3d1e" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>`,
+INFJ:()=>`<svg viewBox="0 0 100 100"><ellipse cx="50" cy="60" rx="28" ry="22" fill="#2c2c2c"/><ellipse cx="50" cy="52" rx="20" ry="20" fill="#2c2c2c"/><ellipse cx="50" cy="54" rx="14" ry="13" fill="#f0f0f0"/><ellipse cx="30" cy="44" rx="8" ry="13" fill="#2c2c2c" transform="rotate(10 30 44)"/><ellipse cx="70" cy="44" rx="8" ry="13" fill="#2c2c2c" transform="rotate(-10 70 44)"/><ellipse cx="40" cy="49" rx="4.3" ry="5" fill="#1a1a1a"/><circle cx="41.5" cy="47.5" r="1.6" fill="white"/><ellipse cx="60" cy="49" rx="4.3" ry="5" fill="#1a1a1a"/><circle cx="61.5" cy="47.5" r="1.6" fill="white"/><ellipse cx="50" cy="59" rx="6" ry="4" fill="#c8846a"/><path d="M44 62 Q50 67 56 62" stroke="#4a2c1e" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>`,
+INFP:()=>`<svg viewBox="0 0 100 100"><ellipse cx="50" cy="62" rx="32" ry="26" fill="#f8f8f8"/><ellipse cx="24" cy="50" rx="11" ry="16" fill="#f0f0f0" transform="rotate(5 24 50)"/><ellipse cx="76" cy="50" rx="11" ry="16" fill="#f0f0f0" transform="rotate(-5 76 50)"/><ellipse cx="50" cy="52" rx="24" ry="22" fill="white"/><ellipse cx="40" cy="49" rx="4.5" ry="5" fill="#1e1e1e"/><circle cx="41.5" cy="47.5" r="1.5" fill="white"/><ellipse cx="60" cy="49" rx="4.5" ry="5" fill="#1e1e1e"/><circle cx="61.5" cy="47.5" r="1.5" fill="white"/><ellipse cx="50" cy="59" rx="6.5" ry="4" fill="#e8a0a0"/><path d="M43 62 Q50 68 57 62" stroke="#5c3030" stroke-width="1.8" fill="none" stroke-linecap="round"/><ellipse cx="25" cy="42" rx="7" ry="10" fill="#e8e8e8" stroke="#d0d0d0" stroke-width=".7"/><ellipse cx="75" cy="42" rx="7" ry="10" fill="#e8e8e8" stroke="#d0d0d0" stroke-width=".7"/></svg>`,
+INTJ:()=>`<svg viewBox="0 0 100 100"><ellipse cx="50" cy="60" rx="27" ry="22" fill="#b87838"/><ellipse cx="28" cy="46" rx="8" ry="14" fill="#8b5820" transform="rotate(8 28 46)"/><ellipse cx="72" cy="46" rx="8" ry="14" fill="#8b5820" transform="rotate(-8 72 46)"/><ellipse cx="50" cy="50" rx="19" ry="20" fill="#c88840"/><ellipse cx="50" cy="43" rx="7" ry="4" fill="#f0e8d0"/><ellipse cx="40" cy="48" rx="4" ry="4.8" fill="#2c1e14"/><circle cx="41.5" cy="46.5" r="1.4" fill="white"/><ellipse cx="60" cy="48" rx="4" ry="4.8" fill="#2c1e14"/><circle cx="61.5" cy="46.5" r="1.4" fill="white"/><ellipse cx="50" cy="57" rx="5.5" ry="3.5" fill="#c0786a"/><path d="M45 59.5 Q50 64 55 59.5" stroke="#4a2c1e" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>`,
+INTP:()=>`<svg viewBox="0 0 100 100"><ellipse cx="50" cy="58" rx="24" ry="20" fill="#c87838"/><ellipse cx="33" cy="38" rx="5.5" ry="8" fill="#c07030" stroke="#a05820" stroke-width=".8"/><ellipse cx="67" cy="38" rx="5.5" ry="8" fill="#c07030" stroke="#a05820" stroke-width=".8"/><ellipse cx="50" cy="50" rx="18" ry="18" fill="#d48840"/><path d="M38 41 Q50 38 62 41" stroke="#a05820" stroke-width="1" fill="none"/><ellipse cx="40" cy="48" rx="4.2" ry="4.8" fill="#1e1410"/><circle cx="41.5" cy="46.5" r="1.4" fill="white"/><ellipse cx="60" cy="48" rx="4.2" ry="4.8" fill="#1e1410"/><circle cx="61.5" cy="46.5" r="1.4" fill="white"/><ellipse cx="50" cy="57" rx="5.5" ry="3.5" fill="#c0706a"/><path d="M44 59 Q50 64 56 59" stroke="#4a2c1e" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>`,
+ESFJ:()=>`<svg viewBox="0 0 100 100"><ellipse cx="50" cy="60" rx="30" ry="24" fill="#c8a060"/><ellipse cx="22" cy="52" rx="10" ry="16" fill="#b89050" transform="rotate(10 22 52)"/><ellipse cx="78" cy="52" rx="10" ry="16" fill="#b89050" transform="rotate(-10 78 52)"/><ellipse cx="50" cy="52" rx="22" ry="21" fill="#d8b070"/><ellipse cx="40" cy="49" rx="4.8" ry="5.2" fill="#2c1e0e"/><circle cx="41.5" cy="47.5" r="1.7" fill="white"/><ellipse cx="60" cy="49" rx="4.8" ry="5.2" fill="#2c1e0e"/><circle cx="61.5" cy="47.5" r="1.7" fill="white"/><ellipse cx="50" cy="60" rx="8" ry="5" fill="#b08060"/><path d="M42 63 Q50 70 58 63" stroke="#5c3d1e" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`,
+ESFP:()=>`<svg viewBox="0 0 100 100"><ellipse cx="50" cy="58" rx="30" ry="26" fill="#f8f6f0"/><ellipse cx="50" cy="52" rx="26" ry="26" fill="white"/><ellipse cx="20" cy="48" rx="12" ry="18" fill="#f0eee8" transform="rotate(5 20 48)"/><ellipse cx="80" cy="48" rx="12" ry="18" fill="#f0eee8" transform="rotate(-5 80 48)"/><ellipse cx="40" cy="49" rx="4.5" ry="5" fill="#1a1a1a"/><circle cx="41.5" cy="47.5" r="1.5" fill="white"/><ellipse cx="60" cy="49" rx="4.5" ry="5" fill="#1a1a1a"/><circle cx="61.5" cy="47.5" r="1.5" fill="white"/><ellipse cx="50" cy="59" rx="6" ry="4" fill="#e8a0b8"/><path d="M43 62 Q50 68 57 62" stroke="#4a2030" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="50" cy="46" r="2.5" fill="#d4a0b0"/></svg>`,
+ESTJ:()=>`<svg viewBox="0 0 100 100"><ellipse cx="50" cy="60" rx="27" ry="22" fill="#8b6030"/><ellipse cx="50" cy="52" rx="20" ry="20" fill="#a07040"/><path d="M30 45 L22 20 L36 38" fill="#2c2010"/><path d="M70 45 L78 20 L64 38" fill="#2c2010"/><ellipse cx="50" cy="44" rx="9" ry="5" fill="#e8c070"/><ellipse cx="40" cy="49" rx="4.3" ry="5" fill="#1a1408"/><circle cx="41.5" cy="47.5" r="1.5" fill="white"/><ellipse cx="60" cy="49" rx="4.3" ry="5" fill="#1a1408"/><circle cx="61.5" cy="47.5" r="1.5" fill="white"/><ellipse cx="50" cy="58" rx="6.5" ry="4" fill="#c08060"/><path d="M44 61 Q50 66 56 61" stroke="#4a2c1e" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>`,
+ESTP:()=>`<svg viewBox="0 0 100 100"><ellipse cx="50" cy="60" rx="28" ry="22" fill="#888"/><ellipse cx="24" cy="46" rx="9" ry="14" fill="#666" transform="rotate(8 24 46)"/><ellipse cx="76" cy="46" rx="9" ry="14" fill="#666" transform="rotate(-8 76 46)"/><ellipse cx="50" cy="52" rx="20" ry="20" fill="#aaa"/><ellipse cx="50" cy="54" rx="14" ry="12" fill="white"/><ellipse cx="40" cy="49" rx="4.5" ry="5.2" fill="#2858a8"/><circle cx="42" cy="47.5" r="1.6" fill="white"/><ellipse cx="60" cy="49" rx="4.5" ry="5.2" fill="#2858a8"/><circle cx="62" cy="47.5" r="1.6" fill="white"/><ellipse cx="38" cy="45" rx="6" ry="5" fill="#444" opacity=".7"/><ellipse cx="62" cy="45" rx="6" ry="5" fill="#444" opacity=".7"/><ellipse cx="50" cy="59" rx="6" ry="3.8" fill="#c07878"/><path d="M44 62 Q50 67 56 62" stroke="#4a2020" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>`,
+ISFJ:()=>`<svg viewBox="0 0 100 100"><ellipse cx="50" cy="60" rx="27" ry="22" fill="#b87850"/><ellipse cx="20" cy="55" rx="10" ry="20" fill="#8b5030" transform="rotate(5 20 55)"/><ellipse cx="80" cy="55" rx="10" ry="20" fill="#8b5030" transform="rotate(-5 80 55)"/><ellipse cx="50" cy="52" rx="20" ry="20" fill="#c89060"/><ellipse cx="50" cy="44" rx="9" ry="5" fill="#e8c0a0"/><ellipse cx="40" cy="49" rx="4.5" ry="5.3" fill="#1e1008"/><circle cx="41.5" cy="47.5" r="1.6" fill="white"/><ellipse cx="60" cy="49" rx="4.5" ry="5.3" fill="#1e1008"/><circle cx="61.5" cy="47.5" r="1.6" fill="white"/><ellipse cx="50" cy="59" rx="6.5" ry="4" fill="#c07060"/><path d="M43 62 Q50 68 57 62" stroke="#4a2c1e" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>`,
+ISFP:()=>`<svg viewBox="0 0 100 100"><ellipse cx="50" cy="58" rx="27" ry="22" fill="#d06820"/><path d="M28 44 L22 18 L38 38" fill="#c05810"/><path d="M72 44 L78 18 L62 38" fill="#c05810"/><ellipse cx="50" cy="50" rx="20" ry="20" fill="#e07830"/><ellipse cx="50" cy="52" rx="13" ry="12" fill="#f0d0a0"/><ellipse cx="50" cy="44" rx="8" ry="4.5" fill="#f0d0a0"/><ellipse cx="40" cy="48" rx="4.2" ry="4.8" fill="#1e1408"/><circle cx="41.5" cy="46.5" r="1.5" fill="white"/><ellipse cx="60" cy="48" rx="4.2" ry="4.8" fill="#1e1408"/><circle cx="61.5" cy="46.5" r="1.5" fill="white"/><ellipse cx="50" cy="57" rx="5.5" ry="3.5" fill="#c07060"/><path d="M44 59.5 Q50 64 56 59.5" stroke="#4a2010" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>`,
+ISTJ:()=>`<svg viewBox="0 0 100 100"><ellipse cx="50" cy="60" rx="26" ry="21" fill="#a07030"/><ellipse cx="50" cy="52" rx="19" ry="20" fill="#b88040"/><path d="M30 46 L24 22 L37 38" fill="#2c1c08"/><path d="M70 46 L76 22 L63 38" fill="#2c1c08"/><ellipse cx="50" cy="43" rx="8" ry="4.5" fill="#d4a060"/><ellipse cx="40" cy="48" rx="4.2" ry="4.8" fill="#1a1008"/><circle cx="41.5" cy="46.5" r="1.4" fill="white"/><ellipse cx="60" cy="48" rx="4.2" ry="4.8" fill="#1a1008"/><circle cx="61.5" cy="46.5" r="1.4" fill="white"/><ellipse cx="50" cy="57" rx="5.5" ry="3.5" fill="#b87060"/><path d="M44 59.5 Q50 64 56 59.5" stroke="#4a2c10" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>`,
+ISTP:()=>`<svg viewBox="0 0 100 100"><ellipse cx="50" cy="60" rx="30" ry="25" fill="#c87828"/><ellipse cx="50" cy="52" rx="24" ry="22" fill="#d88838"/><path d="M30 44 L26 22 L38 38" fill="#b86820"/><path d="M70 44 L74 22 L62 38" fill="#b86820"/><ellipse cx="50" cy="53" rx="15" ry="13" fill="#f0d8a0"/><ellipse cx="50" cy="44" rx="8" ry="5" fill="#f0d8a0"/><ellipse cx="40" cy="49" rx="4.5" ry="5.2" fill="#1a1008"/><circle cx="41.5" cy="47.5" r="1.6" fill="white"/><ellipse cx="60" cy="49" rx="4.5" ry="5.2" fill="#1a1008"/><circle cx="61.5" cy="47.5" r="1.6" fill="white"/><ellipse cx="50" cy="59" rx="6.5" ry="4" fill="#c08060"/><path d="M43 62 Q50 67 57 62" stroke="#4a2c1e" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>`
+};
+function getSVG(m){return dogSVGs[m]?.()??'';}
+
+// ─── MBTI DATA (C-BARQ-aligned dimensions) ───
+// Each type has 4 C-BARQ-derived scores:
+// sociability (人际社交性), trainability (训练专注度), energy (活力/兴奋度), attachment (依附/注意力索取)
+// These map onto MBTI axes: E/I←sociability, S/N←trainability+curiosity, F/T←attachment, J/P←energy+routine
+const mbtiData={
+ENFJ:{name:"暖场领袖",color:"#d4a050",bg:"linear-gradient(135deg,#5c3d1e,#8b6343)",tagline:"温暖每一个相遇的灵魂",
+desc:"对主人情绪高度敏感，能在你察觉自己情绪之前就先走过来靠着你。社交需求极高，需要大量的人际互动。对家庭成员表现出强烈的依附和关注行为。",
+cbarq:{sociability:{v:92,label:"人际社交性",desc:"对陌生人和家庭成员均表现出主动、热情的互动行为，属于高社交性犬只"},trainability:{v:82,label:"训练专注度",desc:"对正向强化训练响应非常积极，口头鼓励效果尤为显著"},energy:{v:80,label:"活力水平",desc:"活跃度较高，需要每日充分的体能消耗和互动刺激"},attachment:{v:95,label:"依附与注意力索取",desc:"依附行为极强，独处时极易产生分离相关行为问题"}},
+traits:["高社交性","情绪敏感","依附性强","响应式训练"],
+env:"多人家庭环境最为适宜，不适合长时间独处。宽敞有活动空间的居住条件有助于消耗日常精力。",
+interact:"对口头赞扬和身体接触奖励的响应极为强烈，效果往往优于食物奖励。它最享受被你注视和关注的时刻。",
+train:["正向强化效果极佳，口头表扬和抚摸即可作为奖励","擅长学习需要互动配合的技能，如「过来」「靠脚」","避免严厉训斥——情绪敏感型犬只会长期记住负面体验，影响信任关系"],
+care:"分离焦虑是主要健康风险之一。建议从幼犬期开始进行系统的独处适应训练，循序渐进延长独处时间。",
+fun:"狗狗幼儿园、宠物友好聚会，任何有人陪的场合它都如鱼得水。"},
+ENFP:{name:"探索小达人",color:"#e07830",bg:"linear-gradient(135deg,#7a4020,#e07830)",tagline:"世界这么大，我都要闻一遍",
+desc:"嗅探行为非常活跃，每次散步都是一场全身心投入的探索之旅。对新环境、新气味的反应积极而热情。兴奋度和活力水平高，需要丰富的环境刺激。",
+cbarq:{sociability:{v:88,label:"人际社交性",desc:"对人和其他犬只均表现友好，容易与陌生人建立接触"},trainability:{v:58,label:"训练专注度",desc:"因环境刺激容易分散注意力，训练时需要减少干扰源"},energy:{v:94,label:"活力水平",desc:"活力充沛，属于高运动需求犬只，每日运动量需充足"},attachment:{v:72,label:"依附与注意力索取",desc:"对主人有一定依附需求，但独立探索意愿也较强"}},
+traits:["好奇心旺盛","活力充沛","环境敏感","散漫型学习者"],
+env:"探索多样化环境是满足其认知需求的关键。建议经常更换散步路线，提供不同气味和场景刺激。",
+interact:"嗅探游戏对它而言是最高级别的奖励——把零食藏在不同地方让它用鼻子找。对单调的室内活动容易失去兴趣。",
+train:["注意力持续时间较短，每次训练控制在5-10分钟内","在低干扰环境中先建立行为基础，再逐步增加环境复杂度","高价值食物奖励在注意力分散时能有效拉回专注"],
+care:"充足的体能和嗅探消耗是预防问题行为的关键。嗅探类活动的疲劳效果等同于运动量的两倍，是高效的消耗方式。",
+fun:"嗅探训练、寻宝游戏、敏捷障碍赛，任何需要动鼻子和身体的活动。"},
+ENTJ:{name:"规则制定者",color:"#3d2c1e",bg:"linear-gradient(135deg,#1a0e08,#4d3828)",tagline:"这个家，我说了算",
+desc:"对主导权和控制感有强烈需求。在缺乏明确规则和领导关系的环境中，倾向于自行建立秩序。对一致性指令响应良好，对不一致的管理方式会产生困惑和对抗行为。",
+cbarq:{sociability:{v:68,label:"人际社交性",desc:"对陌生人保持适度警惕，需要充分的幼犬期社交化训练"},trainability:{v:90,label:"训练专注度",desc:"对清晰、一致的指令响应极好，具备学习复杂技能的能力"},energy:{v:78,label:"活力水平",desc:"活跃度较高，需要有目的性的体能消耗，漫无目的的运动不够有效"},attachment:{v:55,label:"依附与注意力索取",desc:"相对独立，不过度索取注意力，但对领导角色有强烈认知"}},
+traits:["指令响应强","需要一致规则","独立性高","复杂技能学习快"],
+env:"家庭成员对它的管理方式必须保持高度一致，不同人给出矛盾指令会导致它测试规则边界。明确的空间划分有助于建立安全感。",
+interact:"建立清晰的领导关系是相处的基础，但要以公平而非强硬的方式实现。它尊重你的前提是你的行为具有可预测性和一致性。",
+train:["幼犬期社交化和基础服从训练是关键投资","对复杂多步骤指令的学习速度快","训练者的一致性是成败关键，任何前后矛盾都会被它利用"],
+care:"充足的体能消耗搭配脑力刺激。仅有体力运动而缺乏规则感的环境会加剧控制行为。",
+fun:"高级服从训练、护卫犬基础课程，给它有目标感的任务是最好的满足。"},
+ENTP:{name:"规则研究员",color:"#e89040",bg:"linear-gradient(135deg,#7a4010,#e89040)",tagline:"规则是用来研究的",
+desc:"解决问题能力突出，能快速找到获取资源的新方法。训练过程中会主动探索奖励规律，偶尔会「测试」规则边界。高活力与高好奇心的结合使它需要大量认知刺激。",
+cbarq:{sociability:{v:85,label:"人际社交性",desc:"对人友好外向，善于读取人类的行为模式并加以利用"},trainability:{v:72,label:"训练专注度",desc:"学习速度快但容易对重复内容感到无聊，需要保持新鲜感"},energy:{v:90,label:"活力水平",desc:"高活力，精力充沛，每日运动需求量大"},attachment:{v:68,label:"依附与注意力索取",desc:"有一定依附需求但独立性较强，会用聪明的方式来争取关注"}},
+traits:["问题解决能力强","反应速度快","需要认知刺激","规则边界测试倾向"],
+env:"脑力刺激比单纯体力消耗更为关键。提供益智类玩具、藏食游戏、嗅探挑战，每日脑力消耗不足时问题行为会显著增加。",
+interact:"挑战性的互动游戏最能激发它的参与感。避免重复单调的练习，每次互动加入新的变化保持新鲜感。",
+train:["每次训练引入新元素，避免单纯重复已掌握的内容","把训练变成探索游戏：让它「发现」什么行为能获得奖励","对无聊内容的消极怠工是信号，而非执行能力问题"],
+care:"每日提供至少一种脑力挑战，益智喂食器是简单有效的日常工具。",
+fun:"益智玩具、寻宝游戏、嗅探工作，以及任何需要动脑的结构化活动。"},
+INFJ:{name:"深情感应者",color:"#2c2c2c",bg:"linear-gradient(135deg,#0c0c0c,#3d3d3d)",tagline:"你的心事，我都懂",
+desc:"对主人情绪变化的感知能力极为突出，常在主人意识到自己情绪波动之前就作出响应。社交范围较窄但深度较高，倾向于与固定家庭成员建立深度联结。",
+cbarq:{sociability:{v:35,label:"人际社交性",desc:"对陌生人保持距离，社交圈高度选择性，但对家庭成员表现出深度联结"},trainability:{v:88,label:"训练专注度",desc:"在熟悉、安全的环境中专注度极高，对温和一致的训练响应极好"},energy:{v:70,label:"活力水平",desc:"运动需求适中，更注重高质量的互动时间而非单纯的运动量"},attachment:{v:85,label:"依附与注意力索取",desc:"对主要照顾者的依附程度深，但表达方式通常安静而不张扬"}},
+traits:["情绪感知能力强","选择性社交","训练专注度高","安静的依附行为"],
+env:"安静、稳定的家庭环境，避免频繁的陌生人拜访和噪音干扰。家中需要有属于它的安全退缩角落。",
+interact:"无需热烈互动，安静地坐在它旁边做自己的事，让它在准备好时主动靠近，是建立信任的最有效方式。",
+train:["完全不适合任何形式的惩罚或训斥，负面体验对它的影响持续时间长","在建立充分信任之后，它的学习能力和专注度会令人印象深刻","温和的引导式训练，给足时间和空间"],
+care:"家庭情绪氛围对它的行为状态影响显著。稳定、低压力的家庭环境是它健康的基础。",
+fun:"一对一的安静散步、嗅探游戏，以及陪伴式的日常活动。"},
+INFP:{name:"温柔梦想家",color:"#a0a0c0",bg:"linear-gradient(135deg,#404060,#8080a0)",tagline:"用温柔方式爱着这个世界",
+desc:"行为上以温和、低冲突为主要特征。对强烈刺激和紧张氛围的敏感度高，倾向于回避冲突。在稳定安全的环境中展现出丰富的情感表达，是典型的低冲突依附型犬只。",
+cbarq:{sociability:{v:28,label:"人际社交性",desc:"对陌生人通常保持距离，社交圈小而深，建立信任的过程较慢"},trainability:{v:65,label:"训练专注度",desc:"学习节奏较慢但记忆持久，需要极大耐心和一致的正向强化"},energy:{v:65,label:"活力水平",desc:"运动需求适中，喜欢安静的探索而非高强度活动"},attachment:{v:88,label:"依附与注意力索取",desc:"对主要照顾者依附性强，独处时有一定焦虑倾向，但表达较为安静"}},
+traits:["低冲突行为模式","环境刺激敏感","深度依附","学习节奏慢但持久"],
+env:"稳定、温馨的家庭环境。生活规律的改变需要提前缓慢适应，突然变化容易引发焦虑行为。",
+interact:"轻柔、缓慢的动作与它互动。主动蹲下、等它来找你，而不是上前接近它，是让它感到安全的关键姿态。",
+train:["完全依赖正向强化，对任何负面刺激极为敏感","分解训练目标为极小步骤，每一步成功都及时奖励","训练节奏以它的舒适度为准，不强迫进展"],
+care:"定期检查身体触摸敏感度（C-BARQ 的触摸敏感维度）——敏感犬只在美容和兽医检查时需要特别的脱敏准备。",
+fun:"安静的嗅探游戏、短程轻松的散步、陪伴式的室内活动。"},
+INTJ:{name:"独立战略家",color:"#b87838",bg:"linear-gradient(135deg,#4a2808,#b87838)",tagline:"忠诚只献给真正值得的人",
+desc:"独立性强，不依赖外部社交刺激。行为表现较为自主，对熟悉的日常规律有强烈偏好。对陌生人保持天然警惕，幼犬期社交化训练对塑造成年行为至关重要。",
+cbarq:{sociability:{v:25,label:"人际社交性",desc:"对陌生人保持明显警惕，充分的幼犬社交化训练是必要投资"},trainability:{v:85,label:"训练专注度",desc:"对明确的指令和规则响应好，能快速建立行为模式"},energy:{v:68,label:"活力水平",desc:"运动需求适中，但需要规律性的体能消耗"},attachment:{v:42,label:"依附与注意力索取",desc:"独立性高，不过度索取关注，对个人空间有明确需求"}},
+traits:["高度独立","规律性偏好","对陌生人警惕","指令响应准确"],
+env:"可预测的日常规律是安全感的核心来源。家庭成员的行为和日程规律一致时，它的行为状态最稳定。",
+interact:"尊重它的个人空间。在它主动来找你之前不要强迫互动——强制接触会降低信任度。",
+train:["幼犬期（8-16周）的充分社交化对预防成年后的过度警惕至关重要","对清晰一致的指令响应快","给予足够的自主空间，过度控制会引发抵触"],
+care:"对陌生人警惕属于正常特质，但需要区分正常警觉和过度恐惧焦虑。后者需要专业行为训练干预。",
+fun:"独立的追踪类活动、耐力性运动，以及需要独立完成任务的结构化活动。"},
+ESFJ:{name:"家庭守护者",color:"#c8a060",bg:"linear-gradient(135deg,#5a3808,#c8a060)",tagline:"爱你们，每一个人",
+desc:"对家庭成员依附性极强，人际社交性评分属于最高区间。把照顾家庭成员的行为内化为核心驱动力。规律作息是其安全感的主要来源，突然改变作息容易引发焦虑。",
+cbarq:{sociability:{v:96,label:"人际社交性",desc:"对所有家庭成员和友善陌生人均表现出高度热情的社交行为"},trainability:{v:88,label:"训练专注度",desc:"对家庭训练指令响应极好，配合度高，适合基础礼仪训练"},energy:{v:82,label:"活力水平",desc:"运动需求适中偏高，喜欢参与家庭活动而非独立运动"},attachment:{v:96,label:"依附与注意力索取",desc:"分离焦虑风险极高，是该类型最需要重点管理的行为问题"}},
+traits:["极高社交性","分离焦虑高风险","规律导向","家庭互动驱动"],
+env:"热闹的多人家庭环境是最理想的居住条件。如果主要照顾者需要长时间外出，建立替代性陪伴方案（如日托）是必要的。",
+interact:"让它参与日常家庭活动，感受自己是家庭不可缺少的部分，是它最深的满足感来源。",
+train:["多人家庭中，所有成员的训练方式和指令词必须完全统一","分离焦虑的预防性训练需要从幼犬期就系统开始","出门时保持平静、减少仪式化的告别行为，可以降低离开时的焦虑峰值"],
+care:"分离焦虑预防是最重要的早期工作。若已经出现分离相关症状（破坏行为、过度吠叫），建议寻求认证行为训练师的帮助。",
+fun:"家庭聚会、带它参与日常杂务、一起去宠物友好的餐厅。"},
+ESFP:{name:"活力表演家",color:"#d8c0b0",bg:"linear-gradient(135deg,#6a4838,#c8a090)",tagline:"今天也是最闪亮的一天",
+desc:"兴奋度和活力水平均属高区间。在有观众（人或其他动物）的环境中行为激活程度显著提升。对新奇刺激的探索欲强，是典型的高兴奋度、高社交性犬只组合。",
+cbarq:{sociability:{v:94,label:"人际社交性",desc:"对所有人表现出极强的主动社交行为，初次见面即可热情互动"},trainability:{v:55,label:"训练专注度",desc:"兴奋度高时注意力容易分散，训练需要在低干扰环境中开始"},energy:{v:94,label:"活力水平",desc:"高活力，运动需求大，每日充足的体能消耗对行为管理至关重要"},attachment:{v:85,label:"依附与注意力索取",desc:"强烈的注意力索取行为，喜欢成为家庭互动的中心"}},
+traits:["高兴奋度","极高社交性","训练需要控制环境","运动需求大"],
+env:"有人互动的热闹环境是它的最佳状态。单独在家时间过长会显著增加问题行为发生率。",
+interact:"把训练和日常互动游戏化，它会为「观众」而努力。表演类的才艺训练（握手、翻滚、定点）特别适合它。",
+train:["先在安静环境中建立基础行为，再在有干扰的环境中巩固","掌声和夸张的口头表扬对它是非常有效的奖励","训练节奏要快，多变，避免重复单一的练习内容"],
+care:"日常美容和身体接触的适应性训练从早开始，高兴奋度犬只在美容过程中的配合度训练需要系统进行。",
+fun:"才艺表演类训练、有互动的户外活动，以及任何有「观众」的场合。"},
+ESTJ:{name:"尽职守护者",color:"#8b6030",bg:"linear-gradient(135deg,#3a2010,#8b6030)",tagline:"守护你，是我的天职",
+desc:"保护性行为和对领地的关注度较高。行为表现系统化，对明确的日常规律有强烈需求。在有任务感和目标感的活动中表现最为积极。",
+cbarq:{sociability:{v:68,label:"人际社交性",desc:"对家庭成员高度忠诚，对陌生人保持适度警惕，充分社交化有助于调整警惕度"},trainability:{v:94,label:"训练专注度",desc:"服从性训练表现极为出色，是所有类型中训练专注度最高之一"},energy:{v:78,label:"活力水平",desc:"适中偏高的活力水平，充分的体能消耗有助于行为稳定"},attachment:{v:62,label:"依附与注意力索取",desc:"对家庭有强烈保护意愿，但不过度索取关注，独立完成任务的能力强"}},
+traits:["服从训练响应极佳","保护性行为倾向","规律性需求强","独立任务执行能力强"],
+env:"明确的空间边界和规律的日常作息。它需要清楚知道「哪里是它的职责范围」。",
+interact:"给予明确的任务感——让它知道在特定情境下它的职责是什么，而不是随时处于警戒状态。",
+train:["服从性基础训练是绝对优先事项","充分的幼犬社交化训练可以有效调节对陌生人的过度警惕","规律的训练计划比不定期的集中训练效果更好"],
+care:"每日充足的体能消耗，以及有目标感的工作类活动，是行为稳定的关键。",
+fun:"户外工作类活动、有目标的耐力运动、高级服从训练。"},
+ESTP:{name:"行动冒险家",color:"#888",bg:"linear-gradient(135deg,#303030,#888888)",tagline:"规则？那是什么？能吃吗？",
+desc:"兴奋度和活力水平均处于最高区间。对即时感官刺激的反应极为灵敏，冲动性控制（impulse control）是训练的最大挑战也是最重要的早期工作。",
+cbarq:{sociability:{v:88,label:"人际社交性",desc:"对人和其他犬只均表现出高度活跃的社交行为，狗狗公园是它的主场"},trainability:{v:48,label:"训练专注度",desc:"高兴奋状态下注意力极难集中，冲动控制训练是所有训练的前提"},energy:{v:98,label:"活力水平",desc:"极高活力，运动需求最高级别，每日需要至少1-2小时的高强度运动"},attachment:{v:58,label:"依附与注意力索取",desc:"对主人有一定依附但独立性较强，不过度索取情感回应"}},
+traits:["极高活力","冲动控制需训练","高运动需求","即时感官驱动"],
+env:"宽敞的活动空间是基本需求，小公寓环境中每日充足的户外高强度运动是不可缺少的补偿。",
+interact:"高强度的互动游戏是最好的沟通语言。追球、拔河、飞盘，用行动而非语言来建立关系。",
+train:["冲动控制训练（等待、放弃）是所有其他训练的基础前提","训练节奏快、变化多，避免重复","在高兴奋状态时训练效果非常差，先用运动消耗部分能量再训练"],
+care:"每日至少1小时的高强度运动是行为管理的基础。运动不足时，破坏性行为显著增加。",
+fun:"飞盘、追逐游戏、狗狗运动竞技、游泳，以及任何高强度的互动运动。"},
+ISFJ:{name:"温柔守护者",color:"#b87850",bg:"linear-gradient(135deg,#4a2010,#b87850)",tagline:"我只想静静陪着你",
+desc:"情绪感知能力强，会对主人的情绪状态作出细腻的行为响应。低冲突导向，倾向于避免争执和紧张场面。行为表现温和、可预测，是理想的陪伴型犬只特征组合。",
+cbarq:{sociability:{v:30,label:"人际社交性",desc:"对陌生人保持礼貌距离，对家庭成员表现出深度的安静陪伴行为"},trainability:{v:82,label:"训练专注度",desc:"在熟悉环境中训练专注度高，对温和一致的指令响应良好"},energy:{v:58,label:"活力水平",desc:"运动需求适中，节奏平和的散步和互动即可满足日常需求"},attachment:{v:88,label:"依附与注意力索取",desc:"对主要照顾者依附性强，但表达方式以安静陪伴为主而非主动索取"}},
+traits:["安静陪伴型","情绪感知能力强","温和低冲突","规律性依赖"],
+env:"安静稳定的居住环境，日常规律一致是提供安全感的核心方式。",
+interact:"无需热烈互动，简单的共同存在就是最深的陪伴。它不需要你一直关注它，但它需要知道你在附近。",
+train:["对粗暴对待极为敏感，只适合完全正向的训练方式","建立信任之后，响应度和学习能力会超出预期","稳定一致的训练者和训练方式，避免频繁更换"],
+care:"定期检查触摸敏感度，及时进行美容和兽医检查的脱敏训练。低能量犬只同样需要规律的体能维持。",
+fun:"悠闲的长距离散步、轻柔的互动游戏，以及日常陪伴类活动。"},
+ISFP:{name:"自由艺术家",color:"#d06820",bg:"linear-gradient(135deg,#5a1808,#d06820)",tagline:"我的爱，只给特别的你",
+desc:"独立性和选择性社交是其主要行为特征。高自尊倾向——对强迫性互动会产生明显的回避或抵触行为。在主动建立联结时表现出的情感深度与独处时的疏离感形成鲜明对比。",
+cbarq:{sociability:{v:35,label:"人际社交性",desc:"选择性社交，对认定的人表现深度联结，对陌生人保持明显距离"},trainability:{v:65,label:"训练专注度",desc:"强迫性训练会引发明显抵触，需要尊重其节奏的引导式方法"},energy:{v:68,label:"活力水平",desc:"运动需求适中，喜欢自主节奏的探索而非被安排的高强度活动"},attachment:{v:72,label:"依附与注意力索取",desc:"依附程度中等，对个人空间有明确需求，但与信任对象的联结深度高"}},
+traits:["选择性社交","需要尊重个人空间","训练需引导非强迫","自主节奏"],
+env:"有属于它自己的安静空间是基本需求，不适合长期置于高社交压力的环境中。",
+interact:"最重要的原则：让它来主导互动节奏。当它主动靠近时，给予温和的正向响应。拒绝强制互动。",
+train:["自尊心强的犬只对任何强迫性训练会产生持久的抵触","高价值食物奖励搭配短时间高质量的训练","给予选择权：让它参与决定训练的节奏和步骤"],
+care:"尊重它的个人空间是相处的最基本原则。敏感犬只对家庭情绪氛围的变化有显著反应。",
+fun:"自主节奏的嗅探探索、安静的户外活动，以及独处时的探索游戏。"},
+ISTJ:{name:"踏实守护者",color:"#a07030",bg:"linear-gradient(135deg,#402808,#a07030)",tagline:"默默付出，不求回报",
+desc:"行为的高度可预测性和对规律的强烈依赖是主要特征。作息一致性对它的情绪稳定有直接影响。在结构化训练中表现最为稳定，是各类型中行为可靠性最高之一。",
+cbarq:{sociability:{v:42,label:"人际社交性",desc:"不主动寻求社交刺激，但对家庭成员表现出稳定的忠诚行为"},trainability:{v:90,label:"训练专注度",desc:"对系统、规律的训练计划响应极好，重复练习不会感到厌烦"},energy:{v:62,label:"活力水平",desc:"运动需求适中，规律的日常散步即可满足基本需求"},attachment:{v:58,label:"依附与注意力索取",desc:"依附性适中，不过度索取关注，但对主要照顾者的在场有明显偏好"}},
+traits:["行为高可预测性","规律依赖","系统训练最适合","低骚扰性"],
+env:"固定的散步时间、固定的喂食地点、固定的休息区域，对它的安全感建立有直接正向作用。",
+interact:"稳定的日常互动胜过偶尔的热烈关注。它不需要花哨的活动，可靠的陪伴就是最好的礼物。",
+train:["制定系统的训练计划并严格执行，对进度跟踪有正向反应","不怕重复练习，反而在重复中建立越来越高的精确度","突然改变训练方法或目标会让它感到困惑"],
+care:"保持固定的作息规律，它的生物钟极为精准。日程变化前给予充分的适应时间。",
+fun:"规律的晨跑、每天固定时间的散步，以及稳定可预期的陪伴活动。"},
+ISTP:{name:"冷静独行者",color:"#c87828",bg:"linear-gradient(135deg,#502808,#c87828)",tagline:"低调，是我的风格",
+desc:"独立性强，不依赖外部情感互动。对即时感官体验（气味、声音、物体）的关注度高。情感表达内敛，通过共同活动而非情感展示来建立和维持关系。",
+cbarq:{sociability:{v:22,label:"人际社交性",desc:"低社交需求，不主动寻求人类互动，但与信任对象的活动参与意愿高"},trainability:{v:75,label:"训练专注度",desc:"对实用性目标导向训练响应好，对无目的的重复练习抵触明显"},energy:{v:65,label:"活力水平",desc:"运动需求适中，偏好有探索内容的户外活动而非单纯的体力消耗"},attachment:{v:32,label:"依附与注意力索取",desc:"低依附、低注意力索取，对独处时间有积极接受的倾向"}},
+traits:["高度独立","低社交需求","目标导向学习","情感表达内敛"],
+env:"安静的独立空间和低社交压力的居住条件。不适合被频繁要求进行情感互动的家庭环境。",
+interact:"通过共同完成有目标的任务来建立关系，效果远优于单纯的情感互动。它会用行动来表达信任，而不是外显的情感展示。",
+train:["训练内容需要有明确的实用目的，理解「为什么」有助于它接受指令","比起重复练习，更响应新的实用技能学习","给予足够的自主空间，过度控制会引发消极抵触"],
+care:"充分的独处时间和低社交压力是它健康的基础，而非是需要解决的问题。",
+fun:"独立追踪类活动、探索性的户外运动、需要感官参与的自主游戏。"}
+};
+
+// ─── QUIZ QUESTIONS (C-BARQ aligned) ───
+// 12 questions covering 4 C-BARQ dimensions (3 per dimension):
+// Sociability→E/I, Trainability→S/N (focus+curiosity), Attachment→F/T, Energy+Routine→J/P
+const dimInfo={
+  EI:{name:"社交性",desc:"反映你的狗狗对人际互动和外部刺激的主动性"},
+  SN:{name:"探索与专注",desc:"反映你的狗狗对新事物的好奇心和训练时的专注倾向"},
+  FT:{name:"依附性",desc:"反映你的狗狗对主人情绪和陪伴的依赖程度"},
+  JP:{name:"活力与规律",desc:"反映你的狗狗的日常能量水平和对规律的需求"}
+};
+const questions=[
+  // Sociability (E/I) — 3 questions
+  {emoji:"🚪",dim:"EI",dimLabel:"社交性",
+   text:"家里来了陌生客人，你的狗狗通常会？",
+   opts:[{t:"主动冲上去，热情迎接，跑前跑后，根本停不下来",d:"E",w:2},
+         {t:"站在远处观察，确认无害后才慢慢靠近，或者干脆躲开",d:"I",w:2}]},
+  {emoji:"🐕",dim:"EI",dimLabel:"社交性",
+   text:"在狗狗公园遇到陌生犬只，你家汪汪？",
+   opts:[{t:"立刻冲过去打招呼，热情主动，完全不在意对方是否欢迎",d:"E",w:2},
+         {t:"保持距离观察，或者对接近的陌生犬只表现出警戒或回避",d:"I",w:2}]},
+  {emoji:"🏠",dim:"EI",dimLabel:"社交性",
+   text:"家里只有它一只的时候（你不在家），据你了解它通常？",
+   opts:[{t:"叫唤、搞破坏，或者有明显的焦躁不安行为",d:"E",w:1},
+         {t:"安静等待，行为基本正常，独处对它影响不大",d:"I",w:1}]},
+  // Trainability+curiosity (S/N) — 3 questions
+  {emoji:"👃",dim:"SN",dimLabel:"探索与专注",
+   text:"散步时，你的狗狗在嗅探方面？",
+   opts:[{t:"频繁停下来反复嗅同一个地方，对气味信息极度专注",d:"S",w:2},
+         {t:"嗅几下就继续走，对整体环境和移动的事物更感兴趣",d:"N",w:2}]},
+  {emoji:"🎯",dim:"SN",dimLabel:"探索与专注",
+   text:"进行指令训练时（比如「坐下」「等等」），你的狗狗？",
+   opts:[{t:"能在有一定干扰的环境中集中注意力，对指令保持专注",d:"S",w:2},
+         {t:"一旦有声音、气味或移动物体就很容易分心，需要反复叫回来",d:"N",w:2}]},
+  {emoji:"📦",dim:"SN",dimLabel:"探索与专注",
+   text:"放一个没见过的益智类玩具（食物藏在里面）在它面前，它会？",
+   opts:[{t:"有系统地尝试，能坚持一段时间探索，相对有耐心",d:"S",w:1},
+         {t:"很快尝试各种方法，如果短时间内拿不到就放弃或叫你帮忙",d:"N",w:1}]},
+  // Attachment (F/T) — 3 questions
+  {emoji:"😢",dim:"FT",dimLabel:"依附性",
+   text:"你情绪低落或者生病难受时，你的狗狗会？",
+   opts:[{t:"明显注意到你状态的变化，主动靠近，放低姿势陪着你",d:"F",w:2},
+         {t:"行为没有特别变化，照常活动，对你的情绪状态不太敏感",d:"T",w:2}]},
+  {emoji:"🛌",dim:"FT",dimLabel:"依附性",
+   text:"睡觉时，你的狗狗对睡眠位置的态度是？",
+   opts:[{t:"必须在你附近或贴着你睡，离开后会跟着找你",d:"F",w:2},
+         {t:"有自己固定的地方睡，是否在你旁边对它影响不大",d:"T",w:2}]},
+  {emoji:"🎾",dim:"FT",dimLabel:"依附性",
+   text:"你丢出玩具让它捡回来，它的反应通常是？",
+   opts:[{t:"捡回来放到你面前，等你再次丢出，持续渴望互动",d:"F",w:1},
+         {t:"可能叼着自己玩，或者对捡回来交给你这件事兴趣不大",d:"T",w:1}]},
+  // Energy+Routine (J/P) — 3 questions
+  {emoji:"🍽️",dim:"JP",dimLabel:"活力与规律",
+   text:"对于吃饭时间，你的狗狗？",
+   opts:[{t:"非常守时，到点之前就开始催，误差不超过几分钟",d:"J",w:2},
+         {t:"对吃饭时间不太敏感，有时你叫它它才去，不太主动催",d:"P",w:2}]},
+  {emoji:"⚡",dim:"JP",dimLabel:"活力与规律",
+   text:"室内安静时，你的狗狗通常是什么状态？",
+   opts:[{t:"找东西玩、走来走去、找人互动，停不下来",d:"P",w:1},
+         {t:"安静趴着或睡觉，不在运动或吃饭时通常比较平静",d:"J",w:1}]},
+  {emoji:"🛁",dim:"JP",dimLabel:"活力与规律",
+   text:"面对洗澡这件事，你家汪汪的表现？",
+   opts:[{t:"虽然不喜欢，但基本配合，知道这是日常例行事项",d:"J",w:2},
+         {t:"每次都是一场大逃亡，需要大费周章，完全不接受",d:"P",w:2}]}
+];
+
+// ─── WANGBAIKE ───
+const wbArticles=[
+  {id:1,cat:"science",icon:"🔬",title:"我们用什么来测你的狗狗？——C-BARQ 科学背景",preview:"这个测试的题目设计参考了宾夕法尼亚大学开发的犬类行为量表……",readTime:"3分钟",
+  body:`<p>这个测试使用的 MBTI 框架是一种便于大众理解的娱乐性框架，但我们在题目设计上参考了更严肃的科学工具：<strong>C-BARQ（犬类行为评估与研究问卷）</strong>。</p>
+  <p>C-BARQ 由宾夕法尼亚大学的 Yuying Hsu 和 James Serpell 于2003年开发并经过验证，是目前全球使用最广泛的标准化犬类行为评估工具之一。</p>
+  <p class="highlight"><strong>C-BARQ 包含14个行为维度</strong>，其中与本测试最相关的四个核心维度是：人际社交性（Stranger-directed sociability）、训练专注度（Trainability）、活力水平（Energy level）、以及依附/注意力索取行为（Attachment and attention-seeking）。</p>
+  <p>本测试将这四个维度分别映射到 MBTI 的四个字母轴（E/I, S/N, F/T, J/P），结果描述中的行为特征和建议均基于这四个维度的实际科学含义，而非纯粹的人格类型联想。</p>
+  <p><strong>重要说明：</strong>MBTI 本身并非为犬类设计，现有科学研究（包括2024年发表于 Scientific Reports 的研究）显示犬类性格维度与人类 MBTI 并不完全对应。本测试将 MBTI 作为易于理解的通俗框架使用，结果应作为参考而非诊断。</p>`,tags:["测试说明","C-BARQ","科学背景"]},
+  {id:2,cat:"know",icon:"🧠",title:"狗狗闻屁股其实是在「读档案」",preview:"这个看似奇怪的行为包含了大量精准的社交信息……",readTime:"2分钟",
+  body:`<p>狗狗的肛门腺分泌物含有丰富的化学信号，包括对方的年龄、性别、健康状况，甚至情绪状态。对狗狗来说，闻屁股相当于在读一份完整的身份档案，信息量远超人类的握手寒暄。</p>
+  <p class="highlight"><strong>数据：</strong>狗狗的嗅觉感受器约有2-3亿个，是人类500万个的40-60倍。负责处理气味的大脑区域（嗅球）占其大脑比例约为12%，而人类只有约0.01%。</p>
+  <p>这也是为什么散步时允许它充分嗅探如此重要——嗅探是犬类最重要的信息处理方式，被剥夺嗅探机会的散步对狗狗而言是不完整的。</p>`,tags:["狗狗行为","嗅觉","社交"]},
+  {id:3,cat:"train",icon:"🎯",title:"奖励给早了——大多数人训练效果差的真正原因",preview:"狗狗只能把奖励与奖励前3秒内的行为联系起来……",readTime:"2分钟",
+  body:`<p>狗狗的学习机制基于即时联结——它们只能把奖励与奖励前<strong>约3秒内</strong>发生的行为联系起来。这意味着如果你在它坐下后3秒才摸到口袋掏零食，它可能认为是「起来站立」获得了奖励。</p>
+  <p><strong>响片（Clicker）训练的原理：</strong>先按响片精确标记目标行为，再给零食，解决了人类反应时间导致的时间差问题。响片声成为「奖励即将到来」的桥接信号。</p>
+  <p class="highlight"><strong>实用方法：</strong>把零食提前握在手心（不让它闻到），或者用口头标记词（「好！」「对！」）替代响片——只要你能保证标记词在行为发生后1秒内发出，效果与响片相当。</p>`,tags:["训练技巧","正向强化","科学训练"]},
+  {id:4,cat:"psych",icon:"💭",title:"分离焦虑不是「太黏人」，而是真实的痛苦",preview:"分离焦虑是犬类最常见的行为问题之一，影响约14-17%的家犬……",readTime:"3分钟",
+  body:`<p>分离焦虑（Separation Anxiety）是指犬只在与主要依附对象分离时出现的显著痛苦反应，表现为破坏行为、持续吠叫、随地大小便等。这不是「报复」或「太黏」，而是一种真实的情绪痛苦状态。</p>
+  <p class="highlight"><strong>研究数据：</strong>C-BARQ 数据库的分析显示，分离相关行为问题是宠物犬中最常见的行为问题类别之一。常见高风险因素包括：突然改变主人的日程规律、单人家庭（只有一个依附对象）、以及缺乏幼犬期独处适应训练。</p>
+  <p><strong>有效的预防性策略：</strong>从幼犬期就进行系统的独处脱敏训练，从极短的分离时间（30秒）开始，逐步延长，确保每次分离都在犬只出现焦虑症状之前结束，再慢慢增加时长。</p>
+  <p>告别仪式（反复道别、热情安慰）反而会强化分离前的焦虑预期。保持平静、简短的告别是更有帮助的行为方式。</p>`,tags:["狗狗心理","分离焦虑","行为问题"]},
+  {id:5,cat:"breed",icon:"🦴",title:"为什么贵宾犬成了所有混血的「首选亲本」？",preview:"贵宾犬的卷毛基因和超高智商，让它成为设计师犬种运动的核心……",readTime:"3分钟",
+  body:`<p>现代流行的大多数「设计师犬种」都有贵宾犬血统，原因有两个：</p>
+  <p><strong>1. 低脱毛基因：</strong>贵宾犬的卷毛属于单层毛（不像大多数犬种的双层毛），脱毛量显著更少，被认为对犬毛过敏者更友好。但需要注意：<em>没有任何犬种是完全低过敏的</em>，过敏源来自皮屑和唾液，并非只有毛发。</p>
+  <p><strong>2. 智商排名第二：</strong>根据心理学家 Stanley Coren 的研究，标准贵宾犬的服从性智商排名全犬种第二（仅次于边境牧羊犬）。这使其后代通常具备较好的训练响应度。</p>
+  <p class="highlight"><strong>重要提示：</strong>混血后代的性格和脱毛量无法精确预测，取决于哪个亲本的基因更显性。同一窝幼犬中个体差异可能很大。购买前尽量见过双亲。</p>`,tags:["品种知识","贵宾犬","混血犬"]},
+  {id:6,cat:"health",icon:"🦷",title:"狗狗口腔健康：被严重忽视的问题",preview:"研究显示超过80%的3岁以上犬只存在不同程度的牙周疾病……",readTime:"2分钟",
+  body:`<p>根据美国兽医牙科协会（AVDC）的数据，超过<strong>80%的3岁以上犬只</strong>存在不同程度的牙周疾病。这是最常见但最被忽视的犬类健康问题之一。</p>
+  <p><strong>预防方法（效果由高到低）：</strong>每日刷牙（最有效，但执行率最低）→ 兽医专业洁牙 → 认证的牙齿健康零食/玩具 → 洁牙水。</p>
+  <p class="highlight"><strong>注意：</strong>绝对不能使用人类牙膏——含氟牙膏对犬只有毒。使用专为犬只设计的牙膏（无需漂洗）。</p>
+  <p>口腔细菌在严重的牙周疾病中可以通过血液循环影响心脏、肾脏和肝脏，这是定期口腔维护的重要性远超美观的原因。</p>`,tags:["健康","口腔护理","牙齿"]},
+  {id:7,cat:"know",icon:"🎨",title:"狗狗看到的颜色与你不同",preview:"狗狗并非色盲，但它们的色觉与人类有根本性的差异……",readTime:"2分钟",
+  body:`<p>狗狗的视网膜中含有两种视锥细胞（对应蓝色和黄绿色），而人类有三种。这意味着它们能看到<strong>蓝色和黄色</strong>，但无法区分红色和绿色——这两种颜色在它们眼中都呈现为不同深浅的黄灰色调。</p>
+  <p class="highlight"><strong>实际意义：</strong>在绿色草地上扔一个红色飞盘，对你家狗狗来说那几乎是隐形的。选择蓝色或黄色的玩具，视觉辨识度对它来说更高。</p>
+  <p>另外，狗狗在昏暗光线下的视力远优于人类，因为它们的视网膜中有更多感光细胞（视杆细胞）以及一层反光膜（绒毡层），这正是狗眼在夜间会发出反光的原因。</p>`,tags:["科普","视觉","有趣知识"]},
+  {id:8,cat:"train",icon:"🐾",title:"散步的正确打开方式：嗅探权比步数更重要",preview:"被忽视的「嗅探时间」，对犬只的心理健康影响远超大多数人的认知……",readTime:"2分钟",
+  body:`<p>研究表明，充分的嗅探活动在主观疲劳感方面能产生相当于同等时间强度运动的约<strong>2倍效果</strong>——因为大脑在高速处理气味信息时的能量消耗非常大。</p>
+  <p>这意味着：一次允许充分嗅探的20分钟散步，比一次催着它快步走的40分钟散步更能让它满足和平静。</p>
+  <p class="highlight"><strong>建议：</strong>区分「功能性散步」（完成排泄任务）和「探索性散步」（让它主导节奏）。每周至少安排几次以它的速度和选择为主导的散步，对心理健康的贡献不可忽视。</p>`,tags:["训练技巧","散步","日常管理"]},
+  {id:9,cat:"psych",icon:"🔮",title:"狗狗真的能感知你的情绪吗？科学怎么说",preview:"一项2018年的研究让狗狗区分压力状态和放松状态下的人类气味……",readTime:"3分钟",
+  body:`<p>不是玄学，是多通道感知。研究证实狗狗通过至少三个渠道来感知人类情绪：</p>
+  <p><strong>嗅觉：</strong>2018年发表于《学习与行为》期刊的研究（Queen's University Belfast）发现，狗狗能通过嗅觉区分人类在压力状态和放松状态下的呼气/汗液样本，准确率约为93%。人体在情绪激活时分泌的激素变化（包括皮质醇）构成了可被嗅觉感知的化学信号。</p>
+  <p><strong>面部表情识别：</strong>2015年奥地利维也纳大学的研究证实，狗狗能区分人类面部的高兴和愤怒表情，正确率显著高于随机水平。</p>
+  <p class="highlight"><strong>结论：</strong>你难过的时候它走过来靠着你，不是偶然或「通灵」，而是它的多感官系统检测到了你状态的变化，并选择了接近。这是数万年共同进化的产物。</p>`,tags:["狗狗心理","情绪感知","科学研究"]},
+  {id:10,cat:"breed",icon:"🌍",title:"Cockapoo（可卡贵宾犬）：第一个设计师犬种的真实故事",preview:"1960年代美国的一次「意外繁殖」，开创了现代混血犬种运动……",readTime:"3分钟",
+  body:`<p>Cockapoo（可卡贵宾犬，也叫 Cockerpoo 或 Spoodle）是<strong>可卡犬（Cocker Spaniel）× 贵宾犬（Poodle）</strong>的杂交品种，普遍被认为是现代「设计师犬种」运动中有记录最早的一个品种，最早可追溯到1950-60年代的美国。</p>
+  <p>最初的目的是结合可卡犬的温和性格和贵宾犬的低脱毛特性。1999年，Cockapoo Club of America 成立，目标是通过多代稳定繁殖，建立可预测的品种标准。</p>
+  <p class="highlight"><strong>需要了解的真实情况：</strong>第一代（F1）Cockapoo 的外观和性格差异非常大，因为两个亲本品种的基因组合是随机的。「低过敏原」的特性也不能保证，取决于个体继承了哪个亲本的毛发基因。选购前建议见过双亲，并了解繁育者的健康筛查记录。</p>`,tags:["品种历史","可卡贵宾犬","混血犬"]},
+  {id:11,cat:"health",icon:"🌡️",title:"犬只的正常体温与发烧识别",preview:"狗狗的正常体温范围与人类不同，超过39.5°C需要引起重视……",readTime:"2分钟",
+  body:`<p>犬只的正常直肠温度范围为 <strong>38.0°C - 39.2°C</strong>（100.4°F - 102.5°F），略高于人类正常体温。超过39.5°C属于轻度发热，超过40°C需要就医，41°C以上属于紧急情况。</p>
+  <p><strong>在家判断方法：</strong>最准确的方法是直肠测温（使用宠物专用温度计）。鼻子干燥/湿润不是可靠的发热指标，行为变化（精神萎靡、食欲下降、发抖、呼吸急促）是更有意义的参考信号。</p>
+  <p class="highlight"><strong>绝对禁止：</strong>不能给犬只服用人类退烧药。布洛芬（Ibuprofen）和对乙酰氨基酚（Paracetamol/Tylenol）对犬只均有毒性，可导致严重肝肾损伤甚至死亡。</p>`,tags:["健康","急救","发烧"]},
+  {id:12,cat:"know",icon:"⏰",title:"狗狗为什么知道你快回家了？",preview:"主人还没到门口，它已经在等了——这背后有几种可能的解释……",readTime:"2分钟",
+  body:`<p>这是一个有趣且在科学界尚未完全解答的现象。目前较为科学的解释包括：</p>
+  <p><strong>1. 气味浓度追踪：</strong>你在家中留下的气味痕迹会随时间稀释，狗狗可能通过感知气味浓度的变化来推断你离开多久了，从而预判你的归来时间。</p>
+  <p><strong>2. 日常规律记忆：</strong>犬只对日常时间规律的记忆精度极高，生物钟使它能在固定时间段开始期待你的归来。</p>
+  <p class="highlight">Rupert Sheldrake 的研究记录了大量案例，显示狗狗会在主人回家前10-20分钟开始在门口等候，即使主人的返家时间是随机的。这一现象目前还没有被完全用已知机制解释，是犬类行为研究中一个开放的有趣问题。</p>`,tags:["科普","人犬关系","神奇行为"]}
+];
+
+// ─── ENCYCLOPEDIA DATA ───
+const encData=[
+  {id:"golden",name:"金毛寻回犬",type:"纯种",mbti:"ENFJ",origin:"1868年 · 苏格兰",size:"大型",traits:["高社交性","极易训练","家庭友好"],mixed:false,
+  history:"1868年由英国杜华特公爵培育，通过将黄色寻回犬与特威德水猎犬等多个品种杂交而来，最初目的是猎取水禽。二战后随美国军人传播全球，成为最受欢迎的家庭犬之一。是全球使用量最大的导盲犬品种之一。",
+  personality:"C-BARQ数据显示金毛在社交性、可训练性和依附性三个维度均属于高分区间，是行为特征最为稳定和可预测的品种之一。低陌生人恐惧和低陌生人攻击性，高主动寻求人类互动。情商极高，对人类面部表情和情绪的读取能力出色。",
+  stats:{社交性:95,可训练性:95,活力:82,依附性:92}},
+  {id:"labrador",name:"拉布拉多猎犬",type:"纯种",mbti:"ESFJ",origin:"19世纪初 · 加拿大纽芬兰",size:"大型",traits:["极高社交性","服从性强","食欲旺盛"],mixed:false,
+  history:"起源于加拿大纽芬兰岛的圣约翰斯水犬，被渔民用来帮助拖网捡鱼。19世纪引进英国后逐渐成为猎犬，再发展为全球最受欢迎的家庭犬。连续多年蝉联美国养犬俱乐部（AKC）最受欢迎品种排行前列。三种颜色（黑、黄、巧克力）在行为特征上存在一定差异，研究显示巧克力色拉布拉多寿命略短于其他颜色。",
+  personality:"在 C-BARQ 大型数据库分析中，拉布拉多在陌生人定向社交性和可训练性维度均位于所有犬种的最高区间。体重管理是主要的健康管理挑战，有明显的食物驱动行为。",
+  stats:{社交性:98,可训练性:95,活力:88,依附性:90}},
+  {id:"husky",name:"西伯利亚雪橇犬",type:"纯种",mbti:"ESTP",origin:"约公元前1000年 · 西伯利亚楚科奇",size:"中大型",traits:["极高活力","独立性强","需大量运动"],mixed:false,
+  history:"由西伯利亚楚科奇族人培育超过数千年，是血统最古老的犬种之一（DNA研究证实其基因组成古老）。最初用于长途拉雪橇运输，在零下40-60°C环境下以较少热量消耗维持高速奔跑的能力是进化出来的代谢特性。1925年阿拉斯加诺姆白喉血清接力（Nome Serum Run）中，由 Leonhard Seppala 带领的雪橇犬队完成了关键路段，领头犬 Togo 跑了最长的路段，领头犬 Balto 因完成最后路段而更为知名，其铜像立于纽约中央公园。",
+  personality:"C-BARQ数据中，哈士奇在活力和陌生人定向社交性维度评分高，但可训练性评分相对较低——这反映了梗类/原始犬种固有的独立工作本能，而非智力问题。需要非常充足的每日运动。",
+  stats:{社交性:75,可训练性:52,活力:99,依附性:55}},
+  {id:"corgi",name:"彭布罗克威尔士柯基",type:"纯种",mbti:"ENTP",origin:"约公元10世纪 · 威尔士",size:"小中型",traits:["高活力","聪明机灵","吠声频繁"],mixed:false,
+  history:"威尔士传说中柯基是仙女的坐骑，肩部纹路被称为马鞍印记。历史上作为牧牛犬，通过咬牛蹄跟赶牛群，矮小的体型有助于躲避牛蹄的反踢。彭布罗克（无尾）和卡迪根（有尾）是两个完全不同的品种。伊丽莎白二世女王一生养了超过30只彭布罗克柯基，极大提升了该品种的国际知名度。",
+  personality:"体型小但牧犬本能强烈，可能对奔跑的儿童产生跟踪追逐行为（遗传性牧驱本能）。活力充沛，智商较高，需要充足的脑力和体力消耗。吠叫倾向较强，需要专门训练管理。",
+  stats:{社交性:82,可训练性:78,活力:88,依附性:72}},
+  {id:"shiba",name:"柴犬",type:"纯种",mbti:"ISFP",origin:"约3000年前 · 日本",size:"小中型",traits:["独立自主","高冷傲娇","清洁性强"],mixed:false,
+  history:"日本最古老的本土犬种，被列为日本天然纪念物（1936年）。「柴」在日语中有「小」的意涵，另有说法指颜色似柴火。二战后因疾病和战争几近灭绝，通过全国保种计划才恢复数量。以「柴犬惨叫」（Shiba Scream）闻名网络。DNA研究证实其与中国古代犬种有较近的遗传关系，属于所谓「基础品种群（basal breeds）」之一。",
+  personality:"在 C-BARQ 中，柴犬在陌生人定向恐惧和主人定向攻击性（当被强迫接触时）维度评分偏高，社交性和可训练性相对较低。高度自主，不适合期望高度服从和黏人表现的主人。",
+  stats:{社交性:48,可训练性:55,活力:72,依附性:52}},
+  {id:"samoyed",name:"萨摩耶",type:"纯种",mbti:"INFP",origin:"数千年前 · 西伯利亚萨摩耶族",size:"中大型",traits:["微笑天使","掉毛严重","相对独立"],mixed:false,
+  history:"由西伯利亚萨摩耶族人培育，用于驯鹿放牧、拉雪橇和猎熊。曾随极地探险队参与早期南北极探险（包括 Borchgrevink 1899年南极探险）。天生微笑的外貌来自嘴角上扬的特殊肌肉结构，最初功能是防止在极寒环境中流口水结冰。",
+  personality:"社交性适中，并非所有萨摩耶都像外表那样无限黏人。掉毛量极大（每年两次集中换毛）是主要日常管理挑战。总体性格温和，低攻击性倾向。",
+  stats:{社交性:78,可训练性:65,活力:75,依附性:68}},
+  {id:"border",name:"边境牧羊犬",type:"纯种",mbti:"INFJ",origin:"19世纪 · 英苏边境",size:"中型",traits:["智商全球第一","极度需要工作","高度敏感"],mixed:false,
+  history:"英国/苏格兰边境地区培育的牧羊犬，因极度精准的「凝视牧羊」（herding eye）技术而闻名。心理学家 Stanley Coren 在《犬类智商》（The Intelligence of Dogs, 1994）中将边境牧羊犬列为服从性智商排名第一的犬种。个体 Chaser（2004-2019）经由南卡罗来纳州立大学研究者训练，学会了1022个物体名词，是有记录词汇量最大的非人类动物。",
+  personality:"极高智商同时意味着极高的工作需求——没有充分工作机会的边牧会因认知过剩而出现显著的问题行为。C-BARQ中可训练性评分极高，但同时情绪敏感性和非社交性恐惧评分也较高。只适合有经验、能给予充分运动和工作机会的主人。",
+  stats:{社交性:72,可训练性:99,活力:95,依附性:80}},
+  {id:"poodle",name:"贵宾犬",type:"纯种",mbti:"ENFJ",origin:"15世纪 · 德国/法国",size:"多种",traits:["智商第二","低脱毛量","需要专业美容"],mixed:false,
+  history:"起源于德国，在法国发扬光大，成为法国国犬。「Poodle」来自德语「pudel」（溅水），原本是优秀的水猎犬。贵宾犬的标志性修剪造型（Continental Clip）并非纯粹审美——最初是为了减少水中阻力，同时保护关节免受寒冷。现有玩具型（Toy）、迷你型（Miniature）和标准型（Standard）三种。",
+  personality:"Stanley Coren 研究中服从性智商全犬种第二。C-BARQ数据中可训练性和社交性均在高分区间。几乎没有什么技能是它学不会的，是导盲犬、治疗犬的优秀候选。",
+  stats:{社交性:88,可训练性:97,活力:80,依附性:82}},
+  {id:"germanshepherd",name:"德国牧羊犬",type:"纯种",mbti:"ESTJ",origin:"1899年 · 德国",size:"大型",traits:["服从训练极强","忠诚勇敢","需要工作"],mixed:false,
+  history:"1899年由德国骑兵官 Max von Stephanitz 创立品种标准，目标是培育完美的工作牧羊犬。两次世界大战中大量征用为军犬、信使犬、搜救犬。战后成为全球最广泛使用的警用犬和搜救犬品种，也是保护工作、服务工作方面应用最广的品种之一。",
+  personality:"C-BARQ大数据分析中，德国牧羊犬在可训练性维度评分极高，在陌生人定向恐惧和攻击性方面评分中等偏高，需要充分的幼犬期社交化训练来调节这些特质。",
+  stats:{社交性:70,可训练性:99,活力:88,依附性:75}},
+  {id:"beagle",name:"比格猎犬",type:"纯种",mbti:"ENFP",origin:"16世纪 · 英国",size:"中小型",traits:["嗅觉极强","逃跑风险高","吠声洪亮"],mixed:false,
+  history:"作为群猎犬追踪野兔已有数百年历史。「Beagle」一词词源不明，可能来自古法语「be'geule」（大嘴/嘶叫）。全球最知名的比格犬是 Snoopy（《花生漫画》中的角色）。因为体型适中、性格相对温顺，比格犬也是实验室中最常用于动物实验的犬种——这一点是该品种最具争议的历史背景。",
+  personality:"嗅觉极为发达，一旦锁定气味轨迹会完全忽视主人的召回指令。C-BARQ中其「追逐」（chasing）维度评分非常高。需要安全围栏环境和良好的召回训练。",
+  stats:{社交性:85,可训练性:62,活力:90,依附性:68}},
+  {id:"frenchbulldog",name:"法国斗牛犬",type:"纯种",mbti:"ESFP",origin:"19世纪 · 法国（英国起源）",size:"小型",traits:["适合公寓","呼吸道问题高风险","不耐热"],mixed:false,
+  history:"由英国斗牛犬与法国本地小型犬杂交而来，最初流行于巴黎工人阶级之间，后因时尚圈追捧成为都市宠物犬代表。标志性的「蝙蝠耳」是在法国培育过程中固定下来的特征。近年来超越拉布拉多，成为多个国家和地区最受欢迎的犬种。",
+  personality:"短鼻（短吻犬综合征，BOAS）带来的呼吸困难是重要的健康隐患，夏天必须防暑，避免剧烈运动。由于大量近亲繁殖以固定外貌特征，整体健康状况在纯种犬中属于偏差水平。购买时需特别关注繁育者的健康筛查记录。",
+  stats:{社交性:90,可训练性:70,活力:58,依附性:85}},
+  {id:"akita",name:"秋田犬",type:"纯种",mbti:"ISTP",origin:"17世纪 · 日本秋田县",size:"大型",traits:["对主人极忠诚","对陌生犬警惕","不适合新手"],mixed:false,
+  history:"日本国犬，秋田县地区培育的大型猎犬。最著名的个体是「忠犬八公」——在主人上野英三郎博士1925年去世后，每天在涩谷车站等待，持续了整整九年直至自己去世（1935年）。涩谷车站和秋田市均有其铜像。二战期间几近绝迹，战后通过保种计划才恢复数量，分为日本秋田和美系秋田两个类型。",
+  personality:"对主要照顾者表现出极深的忠诚，但对陌生人和陌生犬只的警惕性和潜在攻击性显著，是 C-BARQ 中犬只定向攻击性评分偏高的品种之一。不适合多宠物家庭，需要有经验的主人。",
+  stats:{社交性:38,可训练性:55,活力:68,依附性:48}},
+  {id:"dachshund",name:"腊肠犬",type:"纯种",mbti:"ENTP",origin:"16世纪 · 德国",size:"小型",traits:["独立固执","背脊健康问题","追踪本能强"],mixed:false,
+  history:"德语「Dachs」意为「獾」，专为钻入獾穴捕猎而培育，长身短腿是进入地洞的进化适应。现有标准型（Standard）和迷你型（Miniature），毛发分为光滑（Smooth）、长毛（Long）、刚毛（Wire）三种。椎间盘疾病（IVDD）是腊肠犬最常见的健康问题，患病率远高于其他品种，这与其异常的脊柱比例直接相关。",
+  personality:"固执是梗犬和猎犬共同的特质，体现在训练响应上是拒绝执行「无意义」的重复指令。社交性尚可但对陌生人有一定警惕，吠叫倾向偏强。体重管理和减少跳跃对脊椎健康至关重要。",
+  stats:{社交性:72,可训练性:58,活力:75,依附性:78}},
+  {id:"chihuahua",name:"吉娃娃",type:"纯种",mbti:"INTJ",origin:"古代 · 墨西哥（可能）",size:"玩具型",traits:["寿命最长之一","体型最小","胆大无畏"],mixed:false,
+  history:"世界上体型最小的犬种，名字来自墨西哥奇瓦瓦州。关于其起源存在争议——一种观点认为它是阿兹特克文明神圣犬种「Techichi」的后代，另一种基于DNA的研究显示可能有亚洲犬种血统。平均寿命14-16年，是所有犬种中寿命最长的类别之一。",
+  personality:"体型最小但自我认知为体型最大。C-BARQ数据中，吉娃娃在陌生人定向攻击性和犬只定向攻击性方面评分偏高，这通常是「小型犬综合征」（缺乏充分训练和规则边界）的结果而非不可改变的特质。充分的幼犬期社交化训练对这个品种尤为关键。",
+  stats:{社交性:60,可训练性:60,活力:68,依附性:80}},
+  // Mixed/Designer breeds
+  {id:"cockapoo",name:"可卡贵宾犬（Cockapoo）",type:"混血",mbti:"ENFP",origin:"1950-60年代 · 美国",size:"小中型",traits:["低脱毛量（不保证）","温顺友好","适应性强"],mixed:true,
+  history:"可卡犬（Cocker Spaniel）× 贵宾犬（Poodle）的杂交品种，是现代有记录最早的「设计师犬种」之一，最早出现于1950-60年代的美国。1999年 Cockapoo Club of America 成立，致力于通过多代稳定繁殖建立品种标准。英国通常写作 Cockerpoo，澳大利亚称作 Spoodle。目前尚未被美国养犬俱乐部（AKC）认可为正式品种。",
+  personality:"继承了可卡犬的温顺性格和贵宾犬的学习能力，通常是容易相处的家庭犬。但第一代（F1）后代的外观、性格和脱毛量差异很大，取决于哪个亲本的基因更显性。常见健康问题包括白内障、髌骨脱位和进行性视网膜萎缩（来自双亲）。",
+  stats:{社交性:90,可训练性:85,活力:78,依附性:82}},
+  {id:"goldendoodle",name:"黄金贵宾犬（Goldendoodle）",type:"混血",mbti:"ENFJ",origin:"1990年代 · 美国/澳大利亚",size:"中大型",traits:["温顺聪明","低脱毛（F1B更可能）","适合作服务犬"],mixed:true,
+  history:"金毛寻回犬（Golden Retriever）× 标准贵宾犬（Standard Poodle），1990年代在美国和澳大利亚同时兴起，最初目标是创造低脱毛的服务犬候选。F1（第一代，50/50杂交）、F1B（回交，75%贵宾血统）和 F2（第二代）在外观和脱毛量方面有显著差异，F1B 通常脱毛量更少。",
+  personality:"集金毛的温顺和贵宾的聪明，整体性格通常非常好。体型较大，需要充足运动空间。需要注意：「低过敏原」宣传不总是准确，建议过敏患者在决定之前实际接触犬只进行测试。",
+  stats:{社交性:92,可训练性:95,活力:85,依附性:88}},
+  {id:"labradoodle",name:"拉布拉多贵宾犬（Labradoodle）",type:"混血",mbti:"ESFJ",origin:"1988年 · 澳大利亚",size:"中大型",traits:["最早有记录的导盲犬混血尝试","性格稳定","低脱毛不稳定"],mixed:true,
+  history:"由澳大利亚皇家盲人协会（Royal Guide Dogs Association of Australia）育犬师 Wally Conron 于1988年首次有意识地培育，专门为一位丈夫对犬毛过敏的视障女性提供导盲犬——这是有记录的第一次「设计师犬种」的目的性育种。Conron 本人后来多次公开表示对引发了商业化混血犬种运动感到后悔，称其为「打开了潘多拉的盒子」。",
+  personality:"聪明、温顺、对人高度友好。但与所有混血犬种一样，性格和脱毛量的可预测性低于纯种犬，个体差异显著。澳洲拉布拉多贵宾犬（Australian Labradoodle）通过多代选择性繁育，性格一致性通常高于第一代 Labradoodle。",
+  stats:{社交性:95,可训练性:92,活力:82,依附性:88}},
+  {id:"jackapoo",name:"杰克贵宾犬（Jackapoo）",type:"混血",mbti:"ENTP",origin:"2000年代 · 英国/美国",size:"小型",traits:["精力极为充沛","聪明但固执","需要高运动量"],mixed:true,
+  history:"杰克罗素梗（Jack Russell Terrier）× 迷你贵宾犬（Miniature Poodle）。杰克罗素梗本身由19世纪英国牧师 John Russell 培育，用于狐狸狩猎，是极度活跃的梗类犬种。与贵宾犬的组合带来了高智商和高能量的结合——这是吸引人的特质，但也意味着高难度的日常管理需求。",
+  personality:"外表迷你可爱，内心是停不下来的高能机器。继承了杰克罗素的固执和对猎物的冲动，以及贵宾犬的学习速度。能量水平通常高于体型预期，每日充足运动是行为稳定的前提。",
+  stats:{社交性:80,可训练性:78,活力:97,依附性:70}},
+  {id:"maltipoo",name:"马耳他贵宾犬（Maltipoo）",type:"混血",mbti:"ISFJ",origin:"1990年代 · 美国",size:"玩具型",traits:["体型极小","需要大量陪伴","适合公寓生活"],mixed:true,
+  history:"马耳他犬（Maltese）× 迷你/玩具贵宾犬（Miniature/Toy Poodle），体重通常2-5千克。马耳他犬本身是历史悠久的伴侣犬品种，有超过2000年的有文字记录历史，曾是地中海贵族的宠物。两者的组合产生了极小体型、温顺性格的都市伴侣犬，在东南亚和东亚地区特别流行。",
+  personality:"极度需要陪伴，是分离焦虑高风险品种之一。对单人家庭或长时间不在家的主人需要提前做充分的独处训练。性格温柔，低冲突倾向，是老年人的理想陪伴犬之一。",
+  stats:{社交性:92,可训练性:78,活力:58,依附性:95}},
+  {id:"bernedoodle",name:"伯恩山贵宾犬（Bernedoodle）",type:"混血",mbti:"INFJ",origin:"2003年 · 加拿大",size:"中大型",traits:["冷静温顺","寿命长于亲本","低脱毛量"],mixed:true,
+  history:"伯恩山犬（Bernese Mountain Dog）× 标准贵宾犬，2003年由加拿大育犬师 Sherry Rupke 首次有意识地培育。伯恩山犬以三色美丽外观著称，但平均寿命较短（约7-8年），杂交的目标之一是利用杂交优势延长寿命。三色外观（黑白棕）的遗传性不稳定，并非所有后代都会呈现经典配色。",
+  personality:"冷静、温和、深情，通常比纯种伯恩山犬更为健康长寿。需要一定运动量但不像纯贵宾那么高要求。个体差异较大，建议见过双亲以评估性格倾向。",
+  stats:{社交性:88,可训练性:90,活力:72,依附性:82}},
+  {id:"schnoodle",name:"雪纳贵宾犬（Schnoodle）",type:"混血",mbti:"INTJ",origin:"1980年代 · 美国",size:"多种",traits:["低脱毛量","警觉性高","对家庭忠诚"],mixed:true,
+  history:"雪纳瑞（Schnauzer）× 贵宾犬（Poodle）。雪纳瑞是德国古老的工作犬种，有巨型、标准和迷你三种，培育历史超过数百年，最初用于捕鼠和护卫。与贵宾犬的组合产生了智商高、低脱毛但同时保留了雪纳瑞警觉保护本能的家庭犬。",
+  personality:"对主人忠诚，对陌生人保持适度警惕，是良好的家庭守护犬。继承了雪纳瑞的独立性和贵宾的学习能力，训练效果好但需要一致性管理。有玩具型、迷你型和标准型，性格倾向随亲本规格有所不同。",
+  stats:{社交性:72,可训练性:88,活力:75,依附性:70}},
+  {id:"cavapoo",name:"查尔斯贵宾犬（Cavapoo）",type:"混血",mbti:"ISFJ",origin:"1990年代 · 澳大利亚",size:"小型",traits:["温顺极低攻击性","分离焦虑高风险","适合家庭"],mixed:true,
+  history:"查尔斯王骑士猎犬（Cavalier King Charles Spaniel）× 迷你贵宾犬，1990年代在澳大利亚首先流行，现已成为英国和澳大利亚最受欢迎的混血犬种之一。查尔斯王骑士猎犬本身以极为温顺、对人友好著称，但同时是二尖瓣疾病（MVD）等遗传健康问题的高发品种——这是选择 Cavapoo 时需要了解的重要背景。",
+  personality:"继承了查尔斯王骑士猎犬的极度温顺和贵宾的聪慧，通常是性格最为稳定友善的混血犬种之一。分离焦虑风险较高（来自查尔斯王骑士猎犬亲本）。购买前务必了解亲本的心脏健康筛查记录。",
+  stats:{社交性:95,可训练性:82,活力:62,依附性:92}},
+  {id:"puggle",name:"巴哥比格犬（Puggle）",type:"混血",mbti:"ESFP",origin:"1990年代 · 美国",size:"小中型",traits:["比亲本更健康","呼吸问题减少","社交友好"],mixed:true,
+  history:"巴哥犬（Pug）× 比格犬（Beagle），由育犬师 Wallace Havens 于1990年代首次有意识地培育，主要目标是改善巴哥犬的呼吸道问题，同时保留其可爱外貌。被认为是「杂交优势」（Hybrid Vigor）效果较明显的设计师犬种之一。",
+  personality:"通常比纯种巴哥更活跃，比纯种比格更安静。面部皱纹较少，呼吸状况通常比巴哥犬好，但仍可能有一定程度的短吻犬综合征。嗅觉追踪本能来自比格犬，需要安全围栏环境。",
+  stats:{社交性:86,可训练性:68,活力:75,依附性:72}}
+];
+
+// ─── LEADERBOARD ───
+const lbData=[
+  {mbti:"ESFP",name:"活力表演家",count:3847},{mbti:"ENFP",name:"探索小达人",count:3612},
+  {mbti:"ESFJ",name:"家庭守护者",count:3290},{mbti:"ENFJ",name:"暖场领袖",count:2956},
+  {mbti:"ISFJ",name:"温柔守护者",count:2740},{mbti:"ESTP",name:"行动冒险家",count:2418},
+  {mbti:"ISFP",name:"自由艺术家",count:2201},{mbti:"INFP",name:"温柔梦想家",count:1956}
+];
+
+// ─── DAILY ───
+const dailyQs=[
+  {q:"C-BARQ 犬类行为量表最初是由哪所大学开发的？",opts:["哈佛大学","宾夕法尼亚大学","剑桥大学","东京大学"],ans:1,tip:"C-BARQ 由宾夕法尼亚大学的 Yuying Hsu 和 James Serpell 于2003年开发，目前数据库已包含超过5万只犬只的行为评估！"},
+  {q:"根据 Stanley Coren 的研究，服从性智商排名全犬种第一的是？",opts:["德国牧羊犬","贵宾犬","金毛寻回犬","边境牧羊犬"],ans:3,tip:"边境牧羊犬位列第一，贵宾犬第二，德国牧羊犬第三。这个排名评估的是「服从性智商」（学习新指令和执行指令的能力），并非犬只整体智力的全貌。"},
+  {q:"以下哪种颜色的玩具，对狗狗来说视觉辨识度最高？",opts:["红色","绿色","蓝色","橙色"],ans:2,tip:"狗狗的色觉是双色视觉，能区分蓝色和黄色，但无法区分红色和绿色。所以蓝色和黄色玩具对它们的视觉辨识度最高，草地上的红色飞盘对它们来说几乎是隐形的！"},
+  {q:"研究显示，充分的嗅探活动产生的疲劳感相当于同等时间运动的约多少倍？",opts:["1倍（相同）","2倍","3倍","无显著差异"],ans:1,tip:"嗅探活动能产生约2倍于同等时间运动的疲劳感，因为大脑在处理气味信息时消耗大量能量。一次充分嗅探的20分钟散步，疲劳效果接近40分钟的普通运动。"},
+  {q:"「分离焦虑」的高风险预防工作应该从什么时候开始？",opts:["成年后发现问题再处理","6个月以后","幼犬期（最好8-16周）","1岁以后"],ans:2,tip:"幼犬期（8-16周）是行为可塑性最强的关键期。分离焦虑的预防性独处适应训练越早开始越有效，从极短的分离时间（30秒）开始系统进行，效果远优于成年后的矫正训练。"}
+];
+
+// ─── STATE ───
+let dogs=[],activeDogId=null,currentQ=0,shareTarget=null;
+let dailyAnswered=localStorage.getItem('daily_ans')===new Date().toDateString();
+let dailyStreak=parseInt(localStorage.getItem('daily_streak')||'0');
+let encFilter='全部',encSearch='';
+
+// ─── MBTI COLOR MAP ───
+const dimColors={EI:'#c49a72',SN:'#7a9e7e',FT:'#c47a7a',JP:'#b87838'};
+
+// ─── TABS ───
+function showTab(tab){
+  document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+tab).classList.remove('hidden');
+  ['home','quiz','wangbaike','encyclopedia','leaderboard'].forEach((t,i)=>{
+    if(t===tab) document.querySelectorAll('.nav-tab')[i]?.classList.add('active');
+  });
+  if(tab==='leaderboard') renderLeaderboard();
+  if(tab==='encyclopedia') renderEncyclopedia();
+  if(tab==='wangbaike') renderWangbaike();
+  if(tab==='result') document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+}
+
+// ─── HOME ───
+function renderHome(){
+  document.getElementById('home-breed-grid').innerHTML=Object.keys(mbtiData).map(m=>{
+    const d=mbtiData[m];
+    return `<div class="breed-card" onclick="openMbtiDetail('${m}')">
+      <div class="more-badge">了解</div>
+      <div class="dog-svg-wrap">${getSVG(m)}</div>
+      <div class="bc-name">${d.name}</div>
+      <div class="bc-type">${m}</div>
+    </div>`;
+  }).join('');
+  renderDaily('home-daily');
+}
+function openMbtiDetail(m){
+  const d=mbtiData[m];
+  document.getElementById('dog-detail-content').innerHTML=`
+    <button class="close-btn" onclick="closeDogDetail()">✕</button>
+    <div style="width:96px;height:96px;margin:0 auto .8rem;">${getSVG(m)}</div>
+    <div style="font-family:'Noto Serif SC',serif;font-size:1.2rem;color:var(--bark-dark);text-align:center;margin-bottom:.25rem;">${d.name}</div>
+    <div style="text-align:center;margin-bottom:.6rem;"><span class="result-mbti-badge" style="background:${d.color};font-size:.95rem;padding:.28rem .9rem;">${m}</span></div>
+    <p style="text-align:center;font-size:.8rem;color:var(--bark);font-style:italic;margin-bottom:.9rem;">"${d.tagline}"</p>
+    <p style="font-size:.84rem;color:var(--text-soft);line-height:1.82;margin-bottom:1.1rem;">${d.desc}</p>
+    <div style="font-size:.76rem;color:var(--text-muted);margin-bottom:.65rem;letter-spacing:.03em;">C-BARQ 行为维度</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.65rem;margin-bottom:1.1rem;">
+      ${Object.entries(d.cbarq).map(([k,v])=>`
+        <div style="background:var(--cream);border-radius:var(--radius-sm);padding:.8rem;">
+          <div style="font-size:.64rem;color:var(--text-muted);margin-bottom:.25rem;">${v.label}</div>
+          <div style="height:4px;background:var(--sand);border-radius:2px;overflow:hidden;margin-bottom:.22rem;"><div style="width:${v.v}%;height:100%;background:${dimColors[k]??'var(--bark)'};border-radius:2px;"></div></div>
+          <div style="font-size:.72rem;color:${dimColors[k]??'var(--bark)'};font-weight:500;">${v.v}/100</div>
+        </div>`).join('')}
+    </div>
+    <div class="trait-pills" style="justify-content:center;margin-bottom:1.1rem;">${d.traits.map(t=>`<span class="trait-pill">${t}</span>`).join('')}</div>
+    <button class="btn-primary" style="width:100%;" onclick="closeDogDetail();showTab('quiz')">测测我的狗狗 →</button>`;
+  document.getElementById('dog-detail-overlay').classList.remove('hidden');
+}
+function closeDogDetail(){document.getElementById('dog-detail-overlay').classList.add('hidden');}
+
+// ─── DAILY ───
+function renderDaily(tid){
+  const el=document.getElementById(tid);if(!el)return;
+  const dq=dailyQs[new Date().getDate()%dailyQs.length];
+  const streak=dailyStreak>0?`<div class="daily-streak">🔥 连续 ${dailyStreak} 天</div>`:'';
+  if(dailyAnswered){el.innerHTML=`<div class="daily-card">${streak}<div class="daily-title">🌟 每日一题</div><div class="daily-q">${dq.q}</div><p style="font-size:.78rem;color:var(--leaf);font-weight:500;">✅ 今天已完成，明天继续！</p></div>`;return;}
+  el.innerHTML=`<div class="daily-card">${streak}<div class="daily-title">🌟 每日狗科学</div><div class="daily-q">${dq.q}</div><div class="daily-opts">${dq.opts.map((o,i)=>`<button class="daily-opt" onclick="answerDaily(${i})">${o}</button>`).join('')}</div></div>`;
+}
+function answerDaily(idx){
+  const dq=dailyQs[new Date().getDate()%dailyQs.length];
+  document.querySelectorAll('.daily-opt').forEach((o,i)=>{o.disabled=true;if(i===dq.ans)o.classList.add('correct');else if(i===idx&&idx!==dq.ans)o.classList.add('wrong');});
+  setTimeout(()=>{
+    document.querySelector('.daily-card')?.insertAdjacentHTML('beforeend',`<p style="font-size:.78rem;color:var(--text-soft);margin-top:.7rem;line-height:1.6;padding:.6rem .85rem;background:var(--warm-white);border-radius:var(--radius-sm);">💡 ${dq.tip}</p>`);
+    if(idx===dq.ans){dailyStreak++;showToast('答对了！🎉 连续'+dailyStreak+'天');}else{dailyStreak=0;showToast('答错了，明天再来！💪');}
+    localStorage.setItem('daily_streak',dailyStreak);localStorage.setItem('daily_ans',new Date().toDateString());dailyAnswered=true;
+  },750);
+}
+
+// ─── BREED PICKER DATA ───
+// Quick breed list for picker: {id, name, mbtiKey (for svg), customColors or null}
+const breedPickerList=[
+  // Pure breeds with SVG
+  {id:'golden',name:'金毛寻回犬',emoji:'🟡',mbtiKey:'ENFJ',type:'pure'},
+  {id:'labrador',name:'拉布拉多',emoji:'🟤',mbtiKey:'ESFJ',type:'pure'},
+  {id:'husky',name:'哈士奇',emoji:'⚪',mbtiKey:'ESTP',type:'pure'},
+  {id:'corgi',name:'柯基',emoji:'🟠',mbtiKey:'ENTP',type:'pure'},
+  {id:'shiba',name:'柴犬',emoji:'🟠',mbtiKey:'ISFP',type:'pure'},
+  {id:'samoyed',name:'萨摩耶',emoji:'⚪',mbtiKey:'INFP',type:'pure'},
+  {id:'border',name:'边境牧羊犬',emoji:'⚫',mbtiKey:'INFJ',type:'pure'},
+  {id:'poodle',name:'贵宾犬',emoji:'⚪',mbtiKey:'ENFJ',type:'pure'},
+  {id:'germanshepherd',name:'德国牧羊犬',emoji:'🟤',mbtiKey:'ESTJ',type:'pure'},
+  {id:'beagle',name:'比格犬',emoji:'🟤',mbtiKey:'ENFP',type:'pure'},
+  {id:'frenchbulldog',name:'法国斗牛犬',emoji:'⚫',mbtiKey:'ESFP',type:'pure'},
+  {id:'akita',name:'秋田犬',emoji:'🟠',mbtiKey:'ISTP',type:'pure'},
+  {id:'dachshund',name:'腊肠犬',emoji:'🟤',mbtiKey:'ENTP',type:'pure'},
+  {id:'chihuahua',name:'吉娃娃',emoji:'🟡',mbtiKey:'INTJ',type:'pure'},
+  {id:'cockapoo',name:'可卡贵宾犬',emoji:'🟤',mbtiKey:'ENFP',type:'mixed'},
+  {id:'goldendoodle',name:'黄金贵宾犬',emoji:'🟡',mbtiKey:'ENFJ',type:'mixed'},
+  {id:'labradoodle',name:'拉布拉多贵宾',emoji:'🟤',mbtiKey:'ESFJ',type:'mixed'},
+  {id:'jackapoo',name:'杰克贵宾犬',emoji:'⚪',mbtiKey:'ENTP',type:'mixed'},
+  {id:'maltipoo',name:'马耳他贵宾',emoji:'⚪',mbtiKey:'ISFJ',type:'mixed'},
+  {id:'cavapoo',name:'查尔斯贵宾',emoji:'🟤',mbtiKey:'ISFJ',type:'mixed'},
+  {id:'other',name:'其他品种',emoji:'🐶',mbtiKey:null,type:'other'},
+];
+
+// Coat color palette for custom coloring
+const coatColors=[
+  {id:'golden',label:'金黄',hex:'#e8a830',secondary:'#c8881a'},
+  {id:'cream',label:'奶白',hex:'#f5e8c8',secondary:'#d8c8a0'},
+  {id:'white',label:'纯白',hex:'#f8f8f8',secondary:'#e0e0e0'},
+  {id:'brown',label:'棕色',hex:'#8b5530',secondary:'#6a3d1e'},
+  {id:'black',label:'纯黑',hex:'#2a2a2a',secondary:'#1a1a1a'},
+  {id:'gray',label:'灰色',hex:'#8a8a8a',secondary:'#606060'},
+  {id:'orange',label:'橘红',hex:'#d06020',secondary:'#a84010'},
+  {id:'spotted',label:'花色',hex:'#d4a060',secondary:'#3a3a3a'},
+];
+
+// Currently selected breed/color state
+let pickerSelection={breedId:null,breedName:null,mbtiKey:null,colorId:null,colorHex:null,colorSecondary:null};
+
+// Generate a colored SVG from base MBTI SVG by replacing fill colors
+function coloredSVG(mbtiKey, primaryHex, secondaryHex){
+  if(!mbtiKey) return generateColorDogSVG(primaryHex||'#c49a72', secondaryHex||'#8b6343');
+  const base=getSVG(mbtiKey);
+  if(!base) return generateColorDogSVG(primaryHex||'#c49a72', secondaryHex||'#8b6343');
+  if(!primaryHex) return base;
+  // Replace the primary body colors in the SVG
+  // Each SVG uses specific fill colors - we do a targeted hue-shift via filter
+  // Wrap in a div with a hue-rotate + sepia filter to tint
+  const {h,s,l}=hexToHsl(primaryHex);
+  // Use SVG filter for color overlay — simple approach: colorMatrix
+  const svgWithFilter=base.replace('<svg ', `<svg style="filter:drop-shadow(0 0 0 transparent);" `);
+  return svgWithFilter; // fallback: just return as-is for now, custom generation below
+}
+
+// Generate a generic dog SVG in custom colors
+function generateColorDogSVG(main, dark, accent){
+  // safe lighten inline so we don't depend on declaration order
+  const _ltn=(hex,a)=>{try{let n=parseInt((hex||'#c49a72').replace('#',''),16);const r=Math.min(255,((n>>16)&0xff)+a),g=Math.min(255,((n>>8)&0xff)+a),b=Math.min(255,(n&0xff)+a);return'#'+((1<<24)|(r<<16)|(g<<8)|b).toString(16).slice(1);}catch(e){return hex;}};
+  main=main||'#c49a72'; dark=dark||'#8b6343';
+  accent=accent||_ltn(main,30)||'#d4a0a0';
+  const mid=_ltn(main,15)||main;
+  return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="50" cy="62" rx="30" ry="24" fill="${main}"/>
+    <ellipse cx="26" cy="45" rx="10" ry="14" fill="${dark}" transform="rotate(-12 26 45)"/>
+    <ellipse cx="74" cy="45" rx="10" ry="14" fill="${dark}" transform="rotate(12 74 45)"/>
+    <ellipse cx="50" cy="52" rx="22" ry="22" fill="${mid}"/>
+    <ellipse cx="50" cy="56" rx="14" ry="12" fill="${lighten(main,25)||main}"/>
+    <ellipse cx="40" cy="49" rx="4.5" ry="5" fill="#2c1e14"/>
+    <circle cx="41.8" cy="47.5" r="1.5" fill="white"/>
+    <ellipse cx="60" cy="49" rx="4.5" ry="5" fill="#2c1e14"/>
+    <circle cx="61.8" cy="47.5" r="1.5" fill="white"/>
+    <ellipse cx="50" cy="59" rx="6" ry="4" fill="${accent}"/>
+    <path d="M44 62 Q50 67 56 62" stroke="#4a2c1e" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+  </svg>`;
+}
+
+function hexToHsl(hex){
+  let r=parseInt(hex.slice(1,3),16)/255,g=parseInt(hex.slice(3,5),16)/255,b=parseInt(hex.slice(5,7),16)/255;
+  const max=Math.max(r,g,b),min=Math.min(r,g,b);let h,s,l=(max+min)/2;
+  if(max===min){h=s=0;}else{const d=max-min;s=l>0.5?d/(2-max-min):d/(max+min);
+    switch(max){case r:h=((g-b)/d+(g<b?6:0))/6;break;case g:h=((b-r)/d+2)/6;break;case b:h=((r-g)/d+4)/6;break;}}
+  return{h:Math.round(h*360),s:Math.round(s*100),l:Math.round(l*100)};
+}
+
+// ─── QUIZ ───
+function openAddDog(){
+  // Reset selection
+  pickerSelection={breedId:null,breedName:null,mbtiKey:null,colorId:null,colorHex:null,colorSecondary:null};
+  document.getElementById('add-step-1').classList.remove('hidden');
+  document.getElementById('add-step-2').classList.add('hidden');
+  document.getElementById('step-pip-1').style.background='var(--bark)';
+  document.getElementById('step-pip-2').style.background='var(--sand)';
+  document.getElementById('step-label').textContent='第 1 步 / 共 2 步';
+  document.getElementById('dog-name-input').value='';
+  document.getElementById('breed-search').value='';
+  updateBreedSelectionPreview();
+  document.getElementById('add-dog-modal').classList.remove('hidden');
+  setTimeout(()=>document.getElementById('dog-name-input').focus(),100);
+}
+function closeAddDog(){document.getElementById('add-dog-modal').classList.add('hidden');}
+
+function goToStep2(){
+  const name=document.getElementById('dog-name-input').value.trim();
+  if(!name){showToast('请输入狗狗的名字 🐾');return;}
+  document.getElementById('step2-dog-name').textContent=name;
+  document.getElementById('add-step-1').classList.add('hidden');
+  document.getElementById('add-step-2').classList.remove('hidden');
+  document.getElementById('step-pip-2').style.background='var(--bark)';
+  document.getElementById('step-label').textContent='第 2 步 / 共 2 步';
+  renderBreedPicker('');
+  renderColorPicker();
+}
+function goToStep1(){
+  document.getElementById('add-step-2').classList.add('hidden');
+  document.getElementById('add-step-1').classList.remove('hidden');
+  document.getElementById('step-pip-2').style.background='var(--sand)';
+  document.getElementById('step-label').textContent='第 1 步 / 共 2 步';
+  setTimeout(()=>document.getElementById('dog-name-input').focus(),100);
+}
+
+function renderBreedPicker(query){
+  const grid=document.getElementById('breed-picker-grid');
+  const q=query.toLowerCase();
+  const list=breedPickerList.filter(b=>!q||b.name.toLowerCase().includes(q)||b.id.includes(q));
+  grid.innerHTML=list.map(b=>{
+    const sel=pickerSelection.breedId===b.id;
+    const svgPreview=b.mbtiKey?`<div style="width:36px;height:36px;margin:0 auto 3px;">${getSVG(b.mbtiKey)}</div>`:`<div style="font-size:1.5rem;text-align:center;margin-bottom:3px;">${b.emoji}</div>`;
+    return `<div onclick="selectBreed('${b.id}')" style="background:${sel?'var(--bark)':'var(--warm-white)'};border:2px solid ${sel?'var(--bark)':'rgba(212,165,116,.25)'};border-radius:12px;padding:.5rem .3rem;text-align:center;cursor:pointer;transition:all .18s;">
+      ${svgPreview}
+      <div style="font-size:.62rem;color:${sel?'white':'var(--text-soft)'};line-height:1.3;font-weight:${sel?'600':'400'};">${b.name}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderColorPicker(){
+  document.getElementById('color-picker-row').innerHTML=coatColors.map(c=>{
+    const sel=pickerSelection.colorId===c.id&&!pickerSelection.breedId;
+    return `<div onclick="selectColor('${c.id}')" title="${c.label}" style="width:36px;height:36px;border-radius:50%;background:${c.hex};border:3px solid ${sel?'var(--bark-dark)':'rgba(0,0,0,.12)'};cursor:pointer;transition:all .18s;box-shadow:${sel?'0 0 0 2px white,0 0 0 4px '+c.hex:'none'};transform:${sel?'scale(1.15)':'scale(1)'};" title="${c.label}"></div>`;
+  }).join('');
+}
+
+function selectBreed(id){
+  const b=breedPickerList.find(x=>x.id===id);if(!b)return;
+  if(pickerSelection.breedId===id){pickerSelection.breedId=null;pickerSelection.breedName=null;pickerSelection.mbtiKey=null;}
+  else{pickerSelection.breedId=id;pickerSelection.breedName=b.name;pickerSelection.mbtiKey=b.mbtiKey;pickerSelection.colorId=null;}
+  renderBreedPicker(document.getElementById('breed-search').value);
+  renderColorPicker();
+  updateBreedSelectionPreview();
+}
+
+function selectColor(id){
+  const c=coatColors.find(x=>x.id===id);if(!c)return;
+  if(pickerSelection.colorId===id&&!pickerSelection.breedId){pickerSelection.colorId=null;pickerSelection.colorHex=null;pickerSelection.colorSecondary=null;}
+  else{pickerSelection.colorId=id;pickerSelection.colorHex=c.hex;pickerSelection.colorSecondary=c.secondary;pickerSelection.breedId=null;pickerSelection.breedName=null;pickerSelection.mbtiKey=null;}
+  renderBreedPicker(document.getElementById('breed-search').value);
+  renderColorPicker();
+  updateBreedSelectionPreview();
+}
+
+function clearBreedSelection(){
+  pickerSelection={breedId:null,breedName:null,mbtiKey:null,colorId:null,colorHex:null,colorSecondary:null};
+  renderBreedPicker(document.getElementById('breed-search').value);
+  renderColorPicker();
+  updateBreedSelectionPreview();
+}
+
+function filterBreedPicker(){
+  renderBreedPicker(document.getElementById('breed-search').value);
+}
+
+function updateBreedSelectionPreview(){
+  const preview=document.getElementById('breed-selection-preview');
+  if(pickerSelection.breedId||pickerSelection.colorId){
+    preview.style.display='flex';
+    if(pickerSelection.breedId&&pickerSelection.mbtiKey){
+      document.getElementById('bsp-svg').innerHTML=getSVG(pickerSelection.mbtiKey);
+      document.getElementById('bsp-name').textContent=pickerSelection.breedName;
+      document.getElementById('bsp-sub').textContent='已选品种 · 使用专属形象';
+    } else if(pickerSelection.colorId){
+      const c=coatColors.find(x=>x.id===pickerSelection.colorId);
+      document.getElementById('bsp-svg').innerHTML=generateColorDogSVG(c.hex,c.secondary);
+      document.getElementById('bsp-name').textContent=c.label+'色狗狗';
+      document.getElementById('bsp-sub').textContent='自定义毛色 · 生成专属形象';
+    } else if(pickerSelection.breedId){
+      // other breed no svg
+      document.getElementById('bsp-svg').innerHTML='<div style="font-size:2rem;text-align:center;">🐶</div>';
+      document.getElementById('bsp-name').textContent=pickerSelection.breedName||'其他品种';
+      document.getElementById('bsp-sub').textContent='使用通用形象';
+    }
+  } else {
+    preview.style.display='none';
+  }
+}
+
+function getDogSVGForDisplay(dog){
+  // Returns the best SVG for this dog based on their breed/color selection
+  if(dog.breed&&dog.breed.mbtiKey) return getSVG(dog.breed.mbtiKey);
+  if(dog.breed&&dog.breed.colorHex) return generateColorDogSVG(dog.breed.colorHex, dog.breed.colorSecondary);
+  if(dog.result) return getSVG(dog.result.mbti);
+  return getSVG('ENFJ'); // fallback
+}
+
+function confirmAddDog(){
+  const name=document.getElementById('dog-name-input').value.trim();
+  if(!name){showToast('请输入狗狗的名字 🐾');return;}
+  // Save breed/color selection
+  const breed={
+    breedId:pickerSelection.breedId,
+    breedName:pickerSelection.breedName,
+    mbtiKey:pickerSelection.mbtiKey,
+    colorId:pickerSelection.colorId,
+    colorHex:pickerSelection.colorHex,
+    colorSecondary:pickerSelection.colorSecondary,
+  };
+  dogs.push({id:Date.now(),name,breed,scores:{E:0,I:0,S:0,N:0,F:0,T:0,J:0,P:0},done:false,result:null});
+  closeAddDog();renderDogChips();setActiveDog(dogs[dogs.length-1].id);startQuiz();
+}
+function renderDogChips(){
+  document.getElementById('dogs-list').innerHTML=dogs.map(d=>`<button class="dog-chip ${d.id===activeDogId?'active':''}" onclick="setActiveDog(${d.id})">${d.name}${d.done?' ✓':''}</button>`).join('')+`<button class="add-dog-btn" onclick="openAddDog()">+ 添加</button>`;
+}
+function setActiveDog(id){activeDogId=id;renderDogChips();const dog=dogs.find(d=>d.id===id);if(dog.done)showResultPage();else startQuiz();}
+function startQuiz(){currentQ=0;const dog=dogs.find(d=>d.id===activeDogId);dog.scores={E:0,I:0,S:0,N:0,F:0,T:0,J:0,P:0};renderQuestion();}
+
+function renderQuestion(){
+  const dog=dogs.find(d=>d.id===activeDogId);const q=questions[currentQ];
+  const pct=Math.round(currentQ/questions.length*100);
+  // Build dimension pips: group questions into 4 dims of 3 each
+  const dimOrder=['EI','EI','EI','SN','SN','SN','FT','FT','FT','JP','JP','JP'];
+  const dims=['EI','SN','FT','JP'];
+  const dimNames=['社交性','专注与探索','依附性','活力与规律'];
+  const pipsHtml=dims.map((dim,di)=>{
+    const start=di*3;
+    return `<div style="flex:1;">
+      <div style="display:flex;gap:2px;margin-bottom:3px;">${[0,1,2].map(j=>{
+        const qi=start+j;
+        return `<div style="flex:1;height:3px;border-radius:2px;background:${currentQ>qi?'var(--bark-light)':currentQ===qi?'var(--bark)':'var(--sand)'};"></div>`;
+      }).join('')}</div>
+      <div style="font-size:.6rem;color:${currentQ>=start&&currentQ<start+3?'var(--bark)':'var(--text-muted)'};">${dimNames[di]}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('quiz-main').innerHTML=`
+    <div class="quiz-progress">
+      <div class="progress-info"><span class="progress-label">第 ${currentQ+1} / ${questions.length} 题</span><span class="progress-dog-name">🐾 ${dog.name}</span></div>
+      <div style="display:flex;gap:.5rem;margin-bottom:.3rem;">${pipsHtml}</div>
+    </div>
+    <div class="question-card">
+      <div class="q-scenario">${q.emoji}</div>
+      <div class="q-dim-tag">正在测量：${q.dimLabel}</div>
+      <div class="q-text">${q.text}</div>
+      <div class="q-options">${q.opts.map(o=>`<button class="q-option" onclick="answerQ('${o.d}',${o.w},this)">${o.t}</button>`).join('')}</div>
+    </div>`;
+}
+
+function answerQ(dim,w,btn){
+  if(btn.disabled)return;document.querySelectorAll('.q-option').forEach(b=>b.disabled=true);btn.classList.add('selected');
+  dogs.find(d=>d.id===activeDogId).scores[dim]+=w;
+  setTimeout(()=>{currentQ++;if(currentQ<questions.length)renderQuestion();else finishQuiz();},360);
+}
+
+function finishQuiz(){
+  const dog=dogs.find(d=>d.id===activeDogId);const s=dog.scores;
+  const mbti=(s.E>=s.I?'E':'I')+(s.S>=s.N?'S':'N')+(s.F>=s.T?'F':'T')+(s.J>=s.P?'J':'P');
+  dog.result={mbti,data:mbtiData[mbti],scores:s};dog.done=true;renderDogChips();
+  triggerReveal(dog);
+}
+
+// ─── REVEAL ───
+function triggerReveal(dog){
+  const reveal=document.getElementById('result-reveal');
+  const bg=document.getElementById('reveal-bg');
+  const step=document.getElementById('reveal-step');
+  const particles=document.getElementById('reveal-particles');
+  const mbti=dog.result.mbti;const d=dog.result.data;
+  reveal.classList.remove('hidden');
+  bg.style.background=d.bg;setTimeout(()=>bg.style.opacity='1',50);
+  particles.innerHTML='';
+  const colors=['#e8d5b7','#c49a72','#f0c878','#a8c5aa','#d4a574'];
+  for(let i=0;i<28;i++){
+    const p=document.createElement('div');p.className='particle';
+    const size=Math.random()*12+4;
+    p.style.cssText=`width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*colors.length)]};opacity:${Math.random()*.7+.3};left:${Math.random()*100}%;top:${Math.random()*100}%;--tx:${(Math.random()-.5)*300}px;--ty:${(Math.random()-.5)*400}px;animation-delay:${Math.random()}s;animation-duration:${Math.random()*1.5+2}s;`;
+    particles.appendChild(p);
+  }
+  const letters=[
+    {l:mbti[0],s:mbti[0]==='E'?'外向':'内向'},
+    {l:mbti[1],s:mbti[1]==='S'?'实感':'直觉'},
+    {l:mbti[2],s:mbti[2]==='F'?'感性':'理性'},
+    {l:mbti[3],s:mbti[3]==='J'?'计划':'随性'}
+  ];
+  step.innerHTML=`
+    <div class="reveal-dog-svg" id="rdsvg">${getDogSVGForDisplay(dog)}</div>
+    <div style="font-size:.82rem;color:rgba(255,255,255,.6);margin-bottom:.8rem;letter-spacing:.06em;">你家 ${dog.name} 的性格类型</div>
+    <div class="reveal-mbti-letters" id="rletters">
+      ${letters.map((lt,i)=>`<div class="mbti-letter" id="rl${i}" style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);">
+        <div class="ml">${lt.l}</div><div class="ms" style="color:rgba(255,255,255,.7);">${lt.s}</div>
+      </div>`).join('')}
+    </div>
+    <div class="reveal-title" id="rt">${mbti} · ${d.name}</div>
+    <div class="reveal-tagline" id="rtag">"${d.tagline}"</div>
+    <button class="btn-primary reveal-btn" id="rbtn" onclick="dismissReveal()" style="background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.4);backdrop-filter:blur(4px);">查看完整分析 →</button>`;
+  setTimeout(()=>document.getElementById('rdsvg')?.classList.add('show'),200);
+  [0,1,2,3].forEach(i=>setTimeout(()=>document.getElementById(`rl${i}`)?.classList.add('show'),400+i*150));
+  setTimeout(()=>document.getElementById('rt')?.classList.add('show'),900);
+  setTimeout(()=>document.getElementById('rtag')?.classList.add('show'),1100);
+  setTimeout(()=>document.getElementById('rbtn')?.classList.add('show'),1400);
+}
+function dismissReveal(){
+  document.getElementById('result-reveal').classList.add('hidden');
+  document.getElementById('reveal-bg').style.opacity='0';
+  showResultPage();
+}
+
+// ─── RESULT PAGE ───
+function showResultPage(){
+  const done=dogs.filter(d=>d.done);if(!done.length)return;
+  showTab('result');document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  const inner=document.getElementById('result-inner');
+  const scienceNote=`<div class="science-note">
+    <span class="science-note-icon">🔬</span>
+    <div class="science-note-text">测试使用 MBTI 作为通俗框架，题目设计参考宾夕法尼亚大学 C-BARQ 犬类行为量表的四个核心维度（社交性、训练专注度、活力水平、依附性）。MBTI 本身并非为犬类设计的科学工具，结果应作为了解你家狗狗行为特征的参考，而非行为诊断。</div>
+  </div>`;
+  const html=done.map((dog,idx)=>{
+    const r=dog.result;const m=r.mbti;const d=r.data;const s=r.scores;
+    const total={EI:s.E+s.I||1,SN:s.S+s.N||1,FT:s.F+s.T||1,JP:s.J+s.P||1};
+    const pcts={EI:Math.round(s.E/total.EI*100),SN:Math.round(s.S/total.SN*100),FT:Math.round(s.F/total.FT*100),JP:Math.round(s.J/total.JP*100)};
+    const letterInfo=[
+      {k:'EI',l:m[0],label:m[0]==='E'?'外向 Extraverted':'内向 Introverted',c:dimColors.EI},
+      {k:'SN',l:m[1],label:m[1]==='S'?'实感 Sensing':'直觉 iNtuitive',c:dimColors.SN},
+      {k:'FT',l:m[2],label:m[2]==='F'?'感性 Feeling':'理性 Thinking',c:dimColors.FT},
+      {k:'JP',l:m[3],label:m[3]==='J'?'计划 Judging':'随性 Perceiving',c:dimColors.JP}
+    ];
+    const cbarqHtml=Object.entries(d.cbarq).map(([k,v])=>`
+      <div class="cbarq-card">
+        <div class="cbarq-header">
+          <span class="cbarq-label">${v.label}</span>
+          <span class="cbarq-score" style="color:${dimColors[k]??'var(--bark)'};">${v.v}/100</span>
+        </div>
+        <div class="cbarq-bar"><div class="cbarq-fill" style="width:${v.v}%;background:${dimColors[k]??'var(--bark)'};"></div></div>
+        <div class="cbarq-desc">${v.desc}</div>
+      </div>`).join('');
+    const pgCards=[
+      {i:'🏠',t:'理想环境',c:d.env},{i:'🤝',t:'互动原则',c:d.interact},
+      {i:'💊',t:'日常养护重点',c:d.care},{i:'🎮',t:'最适合的活动',c:d.fun},
+      {i:'📌',t:'训练优先事项',c:d.train[0]},{i:'💡',t:'训练注意事项',c:d.train[1]??d.train[0]}
+    ];
+    return `
+      <div class="result-mbti-hero" style="animation:fadeUp .5s ease ${idx*.12}s both;">
+        <div class="rh-letters">
+          ${letterInfo.map(li=>`<div class="rh-letter" style="background:${li.c}18;border:1.5px solid ${li.c}45;">
+            <div class="rl" style="color:${li.c};font-family:'Noto Serif SC',serif;">${li.l}</div>
+            <div class="rs" style="color:${li.c};font-size:.5rem;line-height:1.2;">${li.label.split(' ')[0]}</div>
+          </div>`).join('')}
+        </div>
+        <div style="width:88px;height:88px;margin:0 auto .8rem;">${getDogSVGForDisplay(dog)}</div>
+        <div style="font-family:'Noto Serif SC',serif;font-size:1.25rem;color:var(--bark-dark);margin-bottom:.28rem;">${d.name}</div>
+        <div><span class="result-mbti-badge" style="background:${d.color};">${m}</span> <span style="display:inline-block;background:var(--sand);color:var(--bark-dark);padding:.18rem .7rem;border-radius:100px;font-size:.76rem;">${dog.name}</span></div>
+        <p style="font-size:.85rem;color:var(--bark);font-style:italic;margin-top:.7rem;">"${d.tagline}"</p>
+      </div>
+      <div style="background:var(--warm-white);border-radius:var(--radius);padding:1.4rem;box-shadow:var(--shadow);border:1px solid rgba(212,165,116,.17);margin-bottom:1.3rem;">
+        <p style="font-size:.87rem;color:var(--text-soft);line-height:1.85;margin-bottom:.9rem;">${d.desc}</p>
+        <div class="trait-pills">${d.traits.map(t=>`<span class="trait-pill">${t}</span>`).join('')}</div>
+        ${(()=>{
+          if(!dog.breed||(!dog.breed.breedId&&!dog.breed.colorId)) return '';
+          if(dog.breed.breedId&&dog.breed.breedId!=='other'){
+            // Check if breed's MBTI key matches result
+            const bl=breedPickerList.find(b=>b.id===dog.breed.breedId);
+            const encB=encData.find(e=>e.id===dog.breed.breedId);
+            const mbtiMatch=bl&&encB&&encB.mbti===m;
+            const matchIcon=mbtiMatch?'✅':'🔍';
+            const matchText=mbtiMatch
+              ?`${dog.breed.breedName}的品种天性与 ${m} 高度吻合！这个结果符合科学期待。`
+              :`${dog.breed.breedName}测出了 ${m} · ${d.name}。性格因个体差异，不同个体可能有所不同。`;
+            return `<div style="background:${mbtiMatch?'#edf6ee':'#fdf5ec'};border:1px solid ${mbtiMatch?'#7a9e7e':'#d4a574'};border-radius:var(--radius-sm);padding:.65rem .85rem;margin-top:.8rem;font-size:.78rem;color:${mbtiMatch?'#3d6642':'#7a5020'};display:flex;align-items:flex-start;gap:.45rem;line-height:1.6;">${matchIcon} ${matchText}</div>`;
+          }
+          if(dog.breed.colorId){
+            const c=coatColors.find(x=>x.id===dog.breed.colorId);
+            return `<div style="background:#fdf5ec;border:1px solid #d4a574;border-radius:var(--radius-sm);padding:.65rem .85rem;margin-top:.8rem;font-size:.78rem;color:#7a5020;display:flex;align-items:center;gap:.45rem;">
+              <div style="width:14px;height:14px;border-radius:50%;background:${c?c.hex:'#c49a72'};flex-shrink:0;border:1.5px solid rgba(0,0,0,.15);"></div>
+              你的${c?c.label:''}色狗狗测出了 ${m} · ${d.name}
+            </div>`;
+          }
+          return '';
+        })()}
+      </div>
+      <div class="cbarq-section">
+        <h3>🔬 C-BARQ 行为维度分析</h3>
+        <p class="cbarq-subtitle">基于宾夕法尼亚大学犬类行为量表的四个核心维度</p>
+        <div class="cbarq-grid">${cbarqHtml}</div>
+      </div>
+      <div class="behavior-section">
+        <h3>🐾 给 ${dog.name} 的专属建议</h3>
+        <div class="behavior-grid">${pgCards.map(c=>`<div class="beh-card"><div class="beh-icon">${c.i}</div><div class="beh-title">${c.t}</div><div class="beh-desc">${c.c}</div></div>`).join('')}</div>
+      </div>
+      <div class="tips-section">
+        <h3>📋 训练与互动完整指南</h3>
+        <div class="tips-tabs">
+          <button class="tips-tab active" onclick="switchTip(this,'train-${idx}')">训练方法</button>
+          <button class="tips-tab" onclick="switchTip(this,'interact-${idx}')">互动技巧</button>
+          <button class="tips-tab" onclick="switchTip(this,'care-${idx}')">日常养护</button>
+        </div>
+        <div class="tips-content active" id="train-${idx}">
+          ${d.train.map(t=>`<div class="tip-item"><span class="tip-icon">📌</span><div class="tip-text">${t}</div></div>`).join('')}
+        </div>
+        <div class="tips-content" id="interact-${idx}">
+          <div class="tip-item"><span class="tip-icon">🤝</span><div class="tip-text"><strong>核心原则：</strong>${d.interact}</div></div>
+          <div class="tip-item"><span class="tip-icon">🏠</span><div class="tip-text"><strong>理想环境：</strong>${d.env}</div></div>
+        </div>
+        <div class="tips-content" id="care-${idx}">
+          <div class="tip-item"><span class="tip-icon">💊</span><div class="tip-text"><strong>日常养护：</strong>${d.care}</div></div>
+          <div class="tip-item"><span class="tip-icon">🎮</span><div class="tip-text"><strong>最适活动：</strong>${d.fun}</div></div>
+        </div>
+      </div>
+      <div class="result-actions">
+        <button class="btn-action primary" onclick="openShare(${dog.id})">📤 分享结果</button>
+        <button class="btn-action" onclick="retakeSingle(${dog.id})">🔄 重测 ${dog.name}</button>
+        <button class="btn-action" onclick="showTab('wangbaike')">📚 汪百科</button>
+      </div>`;
+  }).join('');
+  const compareHtml=done.length>=2?buildCompare(done):'';
+  const footer=`<div style="text-align:center;margin-top:.3rem;padding-bottom:1rem;display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap;">
+    <button class="btn-secondary" onclick="retakeAll()">全部重测</button>
+    <button class="btn-primary" onclick="showTab('encyclopedia')">查看品种百科</button>
+  </div>`;
+  inner.innerHTML=scienceNote+html+compareHtml+footer;
+  setTimeout(()=>{document.querySelectorAll('.cbarq-fill').forEach(el=>{const w=el.style.width;el.style.width='0';setTimeout(()=>el.style.width=w,100);});},200);
+}
+function buildCompare(done){
+  const c=calcCompat(done[0].result.mbti,done[1].result.mbti);
+  return `<div class="compare-insight"><h3>🐾 ${done[0].name} × ${done[1].name} C-BARQ 维度契合度</h3><div class="compatibility-score">${c.score}分</div><p>${c.desc}</p></div>`;
+}
+function calcCompat(a,b){let s=60;if(a[0]===b[0])s+=15;else s-=5;if(a[1]===b[1])s+=10;if(a[2]===b[2])s+=10;else s+=5;if(a[3]===b[3])s+=5;s=Math.min(99,Math.max(40,s));return{score:s,desc:s>=85?"C-BARQ 维度高度匹配！两只汪在社交性和互动需求上非常接近，日常相处冲突概率低。":s>=70?"较好的组合，维度差异在可管理范围内，彼此能提供一定的行为互补。":"维度差异较大，需要额外的管理和适应时间，但差异也可以形成互补关系。"};}
+function switchTip(btn,id){btn.closest('.tips-section').querySelectorAll('.tips-tab').forEach(t=>t.classList.remove('active'));btn.closest('.tips-section').querySelectorAll('.tips-content').forEach(c=>c.classList.remove('active'));btn.classList.add('active');document.getElementById(id)?.classList.add('active');}
+function retakeAll(){dogs=[];showTab('quiz');document.getElementById('quiz-main').innerHTML=`<div style="text-align:center;padding:4rem 2rem;color:var(--text-muted);"><div style="font-size:3rem;margin-bottom:1rem;">🐾</div><p style="margin-bottom:1rem;">先添加你的狗狗，然后开始测试！</p><button class="btn-primary" onclick="openAddDog()">添加第一只狗狗</button></div>`;renderDogChips();}
+function retakeSingle(id){const dog=dogs.find(d=>d.id===id);dog.done=false;dog.result=null;setActiveDog(id);showTab('quiz');}
+
+// ─── WANGBAIKE ───
+const wbCats=[{id:'all',name:'全部'},{id:'science',name:'🔬 科学背景'},{id:'know',name:'你知道吗'},{id:'train',name:'训练Tips'},{id:'psych',name:'狗狗心理'},{id:'breed',name:'品种知识'},{id:'health',name:'健康养护'}];
+let wbActive='all';
+function renderWangbaike(){
+  const fe=document.getElementById('wb-filter');
+  if(!fe.children.length)fe.innerHTML=wbCats.map(c=>`<button class="wb-filter-btn ${c.id==='all'?'active':''}" onclick="setWbFilter('${c.id}',this)">${c.name}</button>`).join('');
+  renderWbGrid();
+}
+function setWbFilter(id,btn){wbActive=id;document.querySelectorAll('.wb-filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderWbGrid();}
+function renderWbGrid(){
+  const catMap={know:{name:'你知道吗',cls:'know'},train:{name:'训练Tips',cls:'train'},psych:{name:'狗狗心理',cls:'psych'},breed:{name:'品种知识',cls:'breed'},health:{name:'健康养护',cls:'health'},science:{name:'科学背景',cls:'science'}};
+  const filtered=wbActive==='all'?wbArticles:wbArticles.filter(a=>a.cat===wbActive);
+  document.getElementById('wb-grid').innerHTML=filtered.map(a=>{const cm=catMap[a.cat];return `
+    <div class="wb-card" onclick="openArticle(${a.id})">
+      <div class="wb-card-top"><span class="wb-cat-badge ${cm.cls}">${a.icon} ${cm.name}</span><span class="wb-read-time">⏱ ${a.readTime}</span></div>
+      <div class="wb-card-title">${a.title}</div>
+      <div class="wb-card-preview">${a.preview}</div>
+      <div class="wb-card-footer"><span class="wb-emoji-tag">${a.tags.map(t=>`#${t}`).join(' ')}</span><span class="wb-arrow">→</span></div>
+    </div>`;}).join('');
+}
+function openArticle(id){
+  const a=wbArticles.find(x=>x.id===id);if(!a)return;
+  const catMap={know:{name:'你知道吗',cls:'know'},train:{name:'训练Tips',cls:'train'},psych:{name:'狗狗心理',cls:'psych'},breed:{name:'品种知识',cls:'breed'},health:{name:'健康养护',cls:'health'},science:{name:'科学背景',cls:'science'}};
+  const cm=catMap[a.cat];
+  document.getElementById('article-content').innerHTML=`
+    <button class="close-btn" onclick="closeArticle()">✕</button>
+    <div class="article-cat-badge ${cm.cls}">${a.icon} ${cm.name}</div>
+    <div class="article-title">${a.title}</div>
+    <div class="article-meta">⏱ ${a.readTime}</div>
+    <div class="article-body">${a.body}<div class="tag-list">${a.tags.map(t=>`<span class="tag">#${t}</span>`).join('')}</div></div>`;
+  document.getElementById('article-overlay').classList.remove('hidden');
+}
+function closeArticle(){document.getElementById('article-overlay').classList.add('hidden');}
+
+// ─── ENCYCLOPEDIA ───
+function renderEncyclopedia(){
+  const tf=document.getElementById('enc-type-filter');
+  if(!tf.children.length)['全部','纯种','混血'].forEach(f=>{const b=document.createElement('button');b.className='enc-filter-btn'+(f==='全部'?' active':'');b.textContent=f;b.onclick=()=>setEncFilter(f,b);tf.appendChild(b);});
+  renderEncGrid();
+}
+function setEncFilter(f,btn){encFilter=f;document.querySelectorAll('.enc-filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderEncGrid();}
+function filterEnc(){encSearch=document.getElementById('enc-search').value.toLowerCase();renderEncGrid();}
+function renderEncGrid(){
+  const data=encData.filter(d=>{
+    const tok=encFilter==='全部'||(encFilter==='混血'&&d.mixed)||(encFilter==='纯种'&&!d.mixed);
+    const sok=!encSearch||d.name.toLowerCase().includes(encSearch)||d.id.toLowerCase().includes(encSearch);
+    return tok&&sok;
+  });
+  document.getElementById('enc-grid').innerHTML=data.length?data.map(d=>`
+    <div class="enc-card ${d.mixed?'mixed':''}" onclick="openEncDetail('${d.id}')">
+      ${d.mixed?'<div class="enc-mixed-badge">混血</div>':''}
+      <div class="enc-dog-svg">${getSVG(d.mbti)}</div>
+      <div class="enc-name">${d.name}</div>
+      <div class="enc-type">${d.origin}</div>
+      <div class="enc-trait">${d.traits.slice(0,2).join(' · ')}</div>
+    </div>`).join(''):`<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-muted);">🐾 没有找到匹配的品种</div>`;
+}
+function openEncDetail(id){
+  const d=encData.find(x=>x.id===id);if(!d)return;
+  const svg=getSVG(d.mbti)||`<div style="width:120px;height:120px;background:var(--sand);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:3rem;margin:0 auto;">🐶</div>`;
+  const statsHtml=Object.entries(d.stats).map(([k,v])=>`<div class="ddm-stat"><div class="ddm-stat-label">${k}</div><div class="ddm-stat-bar"><div class="ddm-stat-fill" style="width:${v}%"></div></div><div class="ddm-stat-val">${v}/100</div></div>`).join('');
+  document.getElementById('dog-detail-content').innerHTML=`
+    <button class="close-btn" onclick="closeDogDetail()">✕</button>
+    <div class="ddm-svg">${svg}</div>
+    <div class="ddm-name">${d.name}</div>
+    <div class="ddm-badges">
+      <span style="display:inline-block;background:${d.mixed?'#7a9e7e':'#8b6343'};color:white;padding:.18rem .7rem;border-radius:100px;font-size:.74rem;">${d.mixed?'混血犬':'纯种犬'}</span>
+      <span style="display:inline-block;background:var(--sand);color:var(--bark-dark);padding:.18rem .7rem;border-radius:100px;font-size:.74rem;">${d.size}</span>
+    </div>
+    <p class="ddm-origin">${d.origin}</p>
+    <div class="ddm-tabs">
+      <button class="ddm-tab active" onclick="switchDdmTab(this,'dt-history-${id}')">品种历史</button>
+      <button class="ddm-tab" onclick="switchDdmTab(this,'dt-personality-${id}')">行为特征</button>
+      <button class="ddm-tab" onclick="switchDdmTab(this,'dt-stats-${id}')">C-BARQ 维度</button>
+    </div>
+    <div class="ddm-content active" id="dt-history-${id}"><p>${d.history}</p></div>
+    <div class="ddm-content" id="dt-personality-${id}"><p>${d.personality}</p><div class="trait-pills" style="margin-top:.8rem;">${d.traits.map(t=>`<span class="trait-pill">${t}</span>`).join('')}</div></div>
+    <div class="ddm-content" id="dt-stats-${id}"><p style="font-size:.72rem;color:var(--text-muted);margin-bottom:.75rem;">参考 C-BARQ 核心维度的估算数值，基于该品种的文献行为描述</p><div class="ddm-stat-grid">${statsHtml}</div></div>
+    <button class="btn-primary" style="width:100%;margin-top:1rem;" onclick="closeDogDetail();showTab('quiz')">测测我的狗狗 →</button>`;
+  document.getElementById('dog-detail-overlay').classList.remove('hidden');
+}
+function switchDdmTab(btn,id){const m=btn.closest('.dog-detail-modal');m.querySelectorAll('.ddm-tab').forEach(t=>t.classList.remove('active'));m.querySelectorAll('.ddm-content').forEach(c=>c.classList.remove('active'));btn.classList.add('active');document.getElementById(id)?.classList.add('active');}
+
+// ─── LEADERBOARD ───
+function renderLeaderboard(){
+  const max=lbData[0].count;
+  document.getElementById('leaderboard-list').innerHTML=lbData.map((item,i)=>{
+    const d=mbtiData[item.mbti];
+    return `<div class="lb-item">
+      <div class="lb-rank ${i===0?'gold':i===1?'silver':i===2?'bronze':''}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div>
+      <div class="lb-dog-svg">${getSVG(item.mbti)}</div>
+      <div class="lb-info"><div class="lb-name">${item.name}</div><div class="lb-mbti">${item.mbti}</div></div>
+      <div class="lb-bar-wrap"><div class="lb-bar-track"><div class="lb-bar-fill" style="width:${Math.round(item.count/max*100)}%"></div></div><div class="lb-count">${item.count.toLocaleString()} 次测试</div></div>
+    </div>`;
+  }).join('');
+}
+
+// ─── SHARE (Portrait tall canvas card + QR) ───
+
+function loadQRLib(){
+  return new Promise(res=>{
+    if(window.QRCode){res();return;}
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+    s.onload=res;document.head.appendChild(s);
+  });
+}
+
+async function openShare(dogId){
+  const dog=dogs.find(d=>d.id===dogId);if(!dog?.result)return;
+  shareTarget=dog;
+  const r=dog.result;
+  const shareUrl=`https://wangwang-mbti.com/r/${r.mbti}-${dog.name.charCodeAt(0).toString(16)}`;
+  document.getElementById('share-url').value=shareUrl;
+  document.getElementById('share-overlay').classList.remove('hidden');
+  document.getElementById('share-canvas').style.opacity='0.3';
+  document.getElementById('share-loading').style.display='flex';
+
+  // ── Generate QR FIRST so it's ready to be drawn into the canvas
+  await loadQRLib();
+  const qrEl=document.getElementById('share-qr');
+  qrEl.innerHTML='';
+  await new Promise(res=>{
+    try{
+      new QRCode(qrEl,{text:shareUrl,width:80,height:80,colorDark:'#5c3d1e',colorLight:'#faf6f0',correctLevel:QRCode.CorrectLevel.M});
+      // QRCode renders async via image; wait a tick for the canvas to appear
+      setTimeout(res,120);
+    }catch(e){res();}
+  });
+
+  await renderShareCard(dog, r, shareUrl);
+
+  document.getElementById('share-loading').style.display='none';
+  document.getElementById('share-canvas').style.opacity='1';
+}
+
+async function renderShareCard(dog, r, shareUrl){
+  const canvas=document.getElementById('share-canvas');
+  const ctx=canvas.getContext('2d');
+  const dpr=Math.min(window.devicePixelRatio||2,3);
+
+  // Portrait card — phone-friendly tall format
+  const W=540, H=1020;
+  canvas.width=W*dpr; canvas.height=H*dpr;
+  canvas.style.width='252px';
+  canvas.style.height='476px';
+  ctx.scale(dpr,dpr);
+
+  const d=r.data; const mbti=r.mbti;
+  const accentColor=d.color||'#8b6343';
+  const P=38; // horizontal padding
+
+  // ── 1. Background
+  const bg=ctx.createLinearGradient(0,0,W,H);
+  bg.addColorStop(0,'#fdf8f2');
+  bg.addColorStop(0.55,'#f8f0e6');
+  bg.addColorStop(1,'#f0e4d4');
+  ctx.fillStyle=bg; rr(ctx,0,0,W,H,0); ctx.fill();
+
+  // ── 2. Top accent band
+  const topBand=ctx.createLinearGradient(0,0,W,0);
+  topBand.addColorStop(0,accentColor);
+  topBand.addColorStop(1,lighten(accentColor,50));
+  ctx.fillStyle=topBand; rr(ctx,0,0,W,12,0); ctx.fill();
+
+  // ── 3. Subtle BG circles
+  ctx.save();
+  ctx.globalAlpha=0.055; ctx.fillStyle=accentColor;
+  ctx.beginPath(); ctx.arc(W*0.85,H*0.22,200,0,Math.PI*2); ctx.fill();
+  ctx.globalAlpha=0.04; ctx.fillStyle='#7a9e7e';
+  ctx.beginPath(); ctx.arc(W*0.08,H*0.78,160,0,Math.PI*2); ctx.fill();
+  ctx.restore();
+
+  // ── 4. App name header
+  ctx.fillStyle=accentColor;
+  ctx.font='500 21px sans-serif'; ctx.textAlign='left';
+  ctx.fillText('🐾 汪汪性格测试', P, 54);
+
+  // ── 5. Dog SVG — large centered
+  const svgStr=getDogSVGForDisplay(dog);
+  const dogSize=200;
+  const dogX=(W-dogSize)/2;
+  const dogY=72;
+  // Circle bg behind dog
+  ctx.save();
+  ctx.fillStyle=accentColor+'1a';
+  ctx.beginPath(); ctx.arc(W/2, dogY+dogSize/2, dogSize/2+18, 0, Math.PI*2); ctx.fill();
+  ctx.restore();
+  if(svgStr) await drawSVGtoCanvas(ctx, svgStr, dogX, dogY, dogSize, dogSize);
+
+  // ── 6. MBTI letters row
+  const letterColors={E:'#c49a72',I:'#7a9e7e',S:'#d4a574',N:'#8b7a9e',F:'#c47a7a',T:'#7a9eb8',J:'#b87838',P:'#7ab898'};
+  const letterLabels={E:'外向',I:'内向',S:'实感',N:'直觉',F:'感性',T:'理性',J:'计划',P:'随性'};
+  const lw=94, lh=90, lgap=10;
+  const totalLW=4*lw+3*lgap;
+  const lStartX=(W-totalLW)/2;
+  let y=dogY+dogSize+28;
+  mbti.split('').forEach((lt,i)=>{
+    const x=lStartX+i*(lw+lgap);
+    const col=letterColors[lt]||accentColor;
+    ctx.fillStyle=col+'22'; rr(ctx,x,y,lw,lh,16); ctx.fill();
+    ctx.strokeStyle=col+'80'; ctx.lineWidth=1.8; rr(ctx,x,y,lw,lh,16); ctx.stroke();
+    ctx.fillStyle=col; ctx.font='bold 40px serif'; ctx.textAlign='center';
+    ctx.fillText(lt, x+lw/2, y+54);
+    ctx.fillStyle=col+'bb'; ctx.font='13px sans-serif';
+    ctx.fillText(letterLabels[lt], x+lw/2, y+74);
+  });
+  y += lh+32;
+
+  // ── 7. Type name (large)
+  ctx.fillStyle='#3d2c1e';
+  ctx.font='bold 36px serif'; ctx.textAlign='center';
+  ctx.fillText(d.name, W/2, y);
+  y+=40;
+
+  // ── 8. Dog name + breed pill
+  const _bl=dog.breed&&dog.breed.breedName&&dog.breed.breedId!=='other'
+    ?` · ${dog.breed.breedName}`
+    :(dog.breed&&dog.breed.colorId?` · ${(coatColors.find(c=>c.id===dog.breed.colorId)||{}).label||''}色`:'');
+  const dogPill=`🐾  ${dog.name}${_bl}`;
+  ctx.font='15px sans-serif';
+  const pillW=ctx.measureText(dogPill).width+34;
+  ctx.fillStyle='#e8d5b7'; rr(ctx,(W-pillW)/2,y,pillW,34,100); ctx.fill();
+  ctx.fillStyle='#5c3d1e'; ctx.textAlign='center';
+  ctx.fillText(dogPill, W/2, y+23);
+  y+=34+20;
+
+  // ── 9. Tagline (italic)
+  ctx.fillStyle='#8b6343'; ctx.font='italic 16px serif'; ctx.textAlign='center';
+  const tagline=`"${d.tagline}"`;
+  // wrap if too long
+  const tagMaxW=W-P*2;
+  if(ctx.measureText(tagline).width<=tagMaxW){
+    ctx.fillText(tagline, W/2, y); y+=28;
+  } else {
+    // split at midpoint near comma/space
+    const mid=Math.floor(tagline.length/2);
+    let split=mid;
+    for(let k=mid;k<tagline.length;k++){if(tagline[k]===' '||tagline[k]==='，'){split=k;break;}}
+    ctx.fillText(tagline.slice(0,split), W/2, y); y+=22;
+    ctx.fillText(tagline.slice(split).trim(), W/2, y); y+=28;
+  }
+  y+=8;
+
+  // ── 10. Divider
+  ctx.strokeStyle='#d4bc9960'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(P,y); ctx.lineTo(W-P,y); ctx.stroke();
+  y+=22;
+
+  // ── 11. C-BARQ section title
+  ctx.fillStyle='#5c3d1e'; ctx.font='600 15px sans-serif'; ctx.textAlign='left';
+  ctx.fillText('行为维度分析', P, y);
+  ctx.fillStyle='#b0a090'; ctx.font='11px sans-serif'; ctx.textAlign='right';
+  ctx.fillText('参考 C-BARQ 量表', W-P, y);
+  y+=20;
+
+  // ── 12. C-BARQ bars (4 dimensions)
+  const barColors={EI:'#c49a72',SN:'#7a9e7e',FT:'#c47a7a',JP:'#b87838'};
+  const barH=8, trackW=W-P*2;
+  Object.entries(d.cbarq).forEach(([k,v])=>{
+    ctx.fillStyle='#5c3d1e'; ctx.font='500 13px sans-serif'; ctx.textAlign='left';
+    ctx.fillText(v.label, P, y);
+    ctx.fillStyle=barColors[k]||accentColor; ctx.font='bold 13px sans-serif'; ctx.textAlign='right';
+    ctx.fillText(v.v, W-P, y);
+    y+=17;
+    ctx.fillStyle='#e8d5b7'; rr(ctx,P,y,trackW,barH,4); ctx.fill();
+    ctx.fillStyle=barColors[k]||accentColor;
+    rr(ctx,P,y,Math.round(trackW*v.v/100),barH,4); ctx.fill();
+    y+=barH+18;
+  });
+  y+=4;
+
+  // ── 13. Trait pills
+  const traits=d.traits.slice(0,4);
+  ctx.font='13px sans-serif';
+  const pillGap=8;
+  const pillWs=traits.map(t=>ctx.measureText(t).width+24);
+  const totalPW=pillWs.reduce((a,b)=>a+b,0)+pillGap*(traits.length-1);
+  let px=Math.max(P,(W-totalPW)/2);
+  traits.forEach((tr,i)=>{
+    ctx.fillStyle=accentColor+'28'; rr(ctx,px,y,pillWs[i],28,100); ctx.fill();
+    ctx.strokeStyle=accentColor+'60'; ctx.lineWidth=1; rr(ctx,px,y,pillWs[i],28,100); ctx.stroke();
+    ctx.fillStyle='#3d2c1e'; ctx.textAlign='center';
+    ctx.fillText(tr, px+pillWs[i]/2, y+19);
+    px+=pillWs[i]+pillGap;
+  });
+  y+=28+28;
+
+  // ── 14. Bottom bar (QR + URL + hint)
+  const barH2=110;
+  const barY=H-barH2;
+  ctx.fillStyle='#5c3d1e14'; rr(ctx,0,barY,W,barH2,0); ctx.fill();
+
+  // Draw real QR code from DOM canvas into share canvas
+  const qrContainer=document.getElementById('share-qr');
+  const qrCanvas=qrContainer.querySelector('canvas');
+  const qrSize=76;
+  const qrX=P, qrY=barY+17;
+  if(qrCanvas){
+    try{ ctx.drawImage(qrCanvas, qrX, qrY, qrSize, qrSize); }catch(e){
+      // fallback white box
+      ctx.fillStyle='white'; rr(ctx,qrX,qrY,qrSize,qrSize,6); ctx.fill();
+      ctx.fillStyle='#8b6343'; ctx.font='10px sans-serif'; ctx.textAlign='center';
+      ctx.fillText('QR', qrX+qrSize/2, qrY+qrSize/2+4);
+    }
+  } else {
+    ctx.fillStyle='white'; rr(ctx,qrX,qrY,qrSize,qrSize,6); ctx.fill();
+    ctx.fillStyle='#b0a090'; ctx.font='10px sans-serif'; ctx.textAlign='center';
+    ctx.fillText('扫码', qrX+qrSize/2, qrY+qrSize/2+4);
+  }
+
+  // Text next to QR
+  const tx=P+qrSize+16;
+  ctx.fillStyle='#8b6343'; ctx.font='bold 13px sans-serif'; ctx.textAlign='left';
+  ctx.fillText('扫码测试你的狗狗 →', tx, barY+34);
+  ctx.fillStyle='#b0a090'; ctx.font='11px sans-serif';
+  // truncate URL if too long
+  let urlText=shareUrl;
+  while(ctx.measureText(urlText).width>W-tx-P-10&&urlText.length>20) urlText=urlText.slice(0,-1);
+  if(urlText!==shareUrl) urlText+='…';
+  ctx.fillText(urlText, tx, barY+54);
+  ctx.fillStyle='#5c3d1e88'; ctx.font='500 12px sans-serif';
+  ctx.fillText('长按图片保存到相册', tx, barY+80);
+
+  // Paw emoji top-right of bottom bar
+  ctx.font='22px serif'; ctx.textAlign='right';
+  ctx.fillText('🐾', W-P, barY+58);
+}
+
+
+function drawSVGtoCanvas(ctx,svgStr,x,y,w,h){
+  return new Promise(res=>{
+    // Ensure xmlns present and encode as data URI (avoids Blob URL CSP issues)
+    let s=svgStr.includes('xmlns')?svgStr:svgStr.replace('<svg','<svg xmlns="http://www.w3.org/2000/svg"');
+    // Add explicit width/height so the image has intrinsic dimensions
+    s=s.replace('<svg ','<svg width="100" height="100" ');
+    const encoded='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(s);
+    const img=new Image();
+    img.onload=()=>{ctx.drawImage(img,x,y,w,h);res();};
+    img.onerror=()=>{
+      // Fallback: draw a simple paw circle
+      ctx.save();
+      ctx.fillStyle='rgba(196,154,114,0.3)';
+      ctx.beginPath();ctx.arc(x+w/2,y+h/2,w/2,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#8b6343';ctx.font=`${w*0.5}px serif`;
+      ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText('🐾',x+w/2,y+h/2);
+      ctx.restore();res();
+    };
+    img.src=encoded;
+  });
+}
+
+// Rounded rect path helper
+function rr(ctx,x,y,w,h,r=8){
+  r=Math.min(r,w/2,h/2);
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();
+}
+
+function lighten(hex,amt){
+  let n=parseInt(hex.replace('#',''),16)||0;
+  const r=Math.min(255,((n>>16)&0xff)+amt);
+  const g=Math.min(255,((n>>8)&0xff)+amt);
+  const b=Math.min(255,(n&0xff)+amt);
+  return `#${((1<<24)|(r<<16)|(g<<8)|b).toString(16).slice(1)}`;
+}
+
+function closeShare(){document.getElementById('share-overlay').classList.add('hidden');}
+function copyLink(){const u=document.getElementById('share-url').value;navigator.clipboard.writeText(u).then(()=>showToast('链接已复制 🔗')).catch(()=>{document.getElementById('share-url').select();document.execCommand('copy');showToast('链接已复制 🔗');});}
+function shareWeibo(){const u=document.getElementById('share-url').value;window.open(`https://service.weibo.com/share/share.php?url=${encodeURIComponent(u)}&title=${encodeURIComponent((shareTarget?`我家${shareTarget.name}是${shareTarget.result.mbti}型！`:'来测测你的狗狗MBTI！')+'🐾')}`);}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.remove('hide');setTimeout(()=>t.classList.add('hide'),2600);}
+
+// ─── INIT ───
+renderHome();renderDogChips();
+document.getElementById('dog-name-input').addEventListener('keydown',e=>{if(e.key==='Enter')goToStep2();if(e.key==='Escape')closeAddDog();});
+['add-dog-modal','share-overlay','dog-detail-overlay','article-overlay'].forEach(id=>{
+  document.getElementById(id)?.addEventListener('click',e=>{if(e.target===e.currentTarget)document.getElementById(id).classList.add('hidden');});
+});
+</script>
+</body>
+</html>
